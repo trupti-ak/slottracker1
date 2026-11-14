@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IPTV Trial Slot Tracker – Team Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#0b1020;--panel:#121a2d;--panel2:#18233a;--line:#293650;--text:#edf2ff;--muted:#9aa8c1;--accent:#7c6cff;--green:#19c784;--red:#ff647c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:var(--accent);color:white;font-weight:600}button.secondary{background:#26344f}button.danger{background:#923448}.hidden{display:none!important}.wrap{max-width:1200px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}.brand{font-size:20px;font-weight:700}.brand span{color:var(--green)}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px}.login{max-width:430px;margin:9vh auto}.muted{color:var(--muted)}label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}input,select,textarea{width:100%;background:#0d1527;color:var(--text);border:1px solid var(--line);padding:12px;border-radius:9px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:var(--panel2);padding:15px;border-radius:12px}.stat b{display:block;font-size:25px;margin-top:7px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tabs button{background:#202c45}.tabs button.active{background:var(--accent)}.row{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.row>*{flex:1;min-width:150px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:760px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#203b35;color:#5ce0ac;font-size:11px}.notice{padding:12px;border-radius:10px;background:#2b2548;color:#d8d1ff;margin:12px 0}.error{color:#ff8798}.success{color:#5ce0ac}.slot{border:1px solid var(--line);padding:10px;border-radius:10px;margin:7px 0;background:var(--panel2)}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{min-height:90px;background:#0d1527;border:1px solid var(--line);border-radius:9px;padding:8px;font-size:12px}.day strong{display:block;margin-bottom:6px}.day.today{border-color:var(--green)}.small{font-size:12px}.right{display:flex;gap:8px;align-items:center}@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.wrap{padding:14px}.top{align-items:flex-start;flex-direction:column}.calendar{grid-template-columns:repeat(2,1fr)}}
+</style></head>
+<body><div class="wrap">
+<header class="top"><div class="brand">📺 IPTV Trial Slot Tracker <span>TEAM EDITION</span></div><div id="userbar" class="right hidden"><span id="who" class="muted small"></span><button class="secondary" onclick="logout()">Logout</button></div></header>
+<section id="login" class="card login hidden"><h2>Welcome back</h2><p class="muted">Sign in with your team account.</p><label>Email</label><input id="email" type="email" placeholder="agent@company.com"><label>Password</label><input id="password" type="password" placeholder="Password"><button style="width:100%;margin-top:16px" onclick="login()">Login</button><p id="loginMsg" class="small error"></p></section>
+<main id="app" class="hidden">
+<div class="grid">
+<div class="stat"><span class="muted small">Today's bookings</span><b id="sToday">0</b></div><div class="stat"><span class="muted small">Upcoming</span><b id="sUpcoming">0</b></div><div class="stat"><span class="muted small">Completed trials</span><b id="sDone">0</b></div><div class="stat"><span class="muted small">My bookings</span><b id="sMine">0</b></div>
+</div>
+<div class="tabs" style="margin-top:18px"><button class="active" data-tab="bookings" onclick="tab('bookings',this)">Bookings</button><button data-tab="calendar" onclick="tab('calendar',this)">Live calendar</button><button data-tab="agents" id="agentsTab" onclick="tab('agents',this)">Agents</button><button data-tab="new" onclick="tab('new',this)">＋ New booking</button></div>
+<section id="bookings" class="card"><div class="row"><div><h2>Trial bookings</h2><p class="muted small">Latest team bookings and follow-ups</p></div><div><label>Search</label><input id="search" placeholder="Name, phone, agent..." oninput="renderBookings()"></div><div><label>Status</label><select id="filterStatus" onchange="renderBookings()"><option value="">All statuses</option><option>Upcoming</option><option>Trial Done</option><option>Need to chase</option><option>Cancelled</option></select></div></div><div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Region</th><th>Device</th><th>Status</th><th></th></tr></thead><tbody id="bookingRows"></tbody></table></div></section>
+<section id="calendar" class="card hidden"><h2>Live trial calendar</h2><div class="row"><div><label>Month</label><input id="monthPick" type="month" onchange="renderCalendar()"></div><div><label>View</label><select id="calendarFilter" onchange="renderCalendar()"><option value="">All agents</option></select></div></div><div id="calendarGrid" class="calendar"></div></section>
+<section id="agents" class="card hidden"><h2>Agent profiles</h2><p class="muted small">Admin view of team members.</p><div class="tablewrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead><tbody id="agentRows"></tbody></table></div></section>
+<section id="new" class="card hidden"><h2>Create trial booking</h2><div class="grid" style="grid-template-columns:repeat(2,1fr)">
+<div><label>Customer name *</label><input id="cxName" required></div><div><label>Phone number *</label><input id="cxPhone" required></div><div><label>Trial date (Australia) *</label><input id="cxDate" type="date" required></div><div><label>Trial time (Australia) *</label><input id="cxTime" type="time" required></div><div style="grid-column:1/-1"><label>Converted IST time</label><input id="cxIST" type="text" placeholder="Select Australian date and time" readonly aria-live="polite" style="border-color:#6558e8;color:#5ce0ac;font-weight:600;background:#101a30"></div><div><label>Region</label><select id="cxRegion"><option>NSW</option><option>VIC</option><option>WA</option><option>SA</option><option>QLD</option><option>ACT</option><option>TAS</option><option>NT</option><option>Other</option></select></div><div><label>TV / Device</label><input id="cxDevice" placeholder="Samsung TV, Sony, Fire TV..."></div><div><label>Usage / Package</label><input id="cxUsage" placeholder="N+P, Kayo, etc."></div><div><label>Agent</label><select id="cxAgent"></select></div><div><label>Customer email</label><input id="cxEmail" type="email"></div><div><label>WhatsApp</label><input id="cxWhatsapp"></div></div><label>Notes</label><textarea id="cxNotes" rows="2"></textarea><button style="margin-top:14px" onclick="createBooking()">Save booking</button><p id="bookingMsg" class="small"></p></section>
+</main><p id="globalMsg" class="small muted"></p></div>
+<script>
+let sb, currentUser, profile, bookings=[], agents=[], calendarSlots=[];
+const $=id=>document.getElementById(id);
+
+// Australian state/territory -> IANA timezone. Intl applies the correct
+// Australian daylight-saving offset for the selected trial date.
+const AU_TIMEZONES = {
+  NSW: 'Australia/Sydney', VIC: 'Australia/Melbourne',
+  QLD: 'Australia/Brisbane', WA: 'Australia/Perth',
+  SA: 'Australia/Adelaide', ACT: 'Australia/Sydney',
+  TAS: 'Australia/Hobart', NT: 'Australia/Darwin',
+  Other: 'Australia/Sydney'
+};
+function timezoneForRegion(region) {
+  return AU_TIMEZONES[String(region || '').toUpperCase()] || 'Australia/Sydney';
+}
+// Interpret a date + clock time as a wall-clock time in the chosen AU zone,
+// then return its corresponding UTC instant. No fixed-hour offset is used.
+function australianLocalToUTC(date, time, timezone) {
+  if (!date || !time) return null;
+  const [year, month, day] = date.split('-').map(Number);
+  const [hour, minute] = time.slice(0, 5).split(':').map(Number);
+  if (![year, month, day, hour, minute].every(Number.isFinite)) return null;
+  const target = Date.UTC(year, month - 1, day, hour, minute);
+  let guess = target;
+  for (let i = 0; i < 6; i++) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+      timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).formatToParts(new Date(guess)).map(p => [p.type, p.value]));
+    const represented = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute);
+    const adjustment = target - represented;
+    if (adjustment === 0) break;
+    guess += adjustment;
+  }
+  return new Date(guess);
+}
+function formatIST(utcDate) {
+  if (!utcDate || Number.isNaN(utcDate.getTime())) return '—';
+  return new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', hour12: true
+  }).format(utcDate) + ' IST';
+}
+function getBookingISTInstant(booking) {
+  const utc = australianLocalToUTC(booking.trial_date, String(booking.trial_time || '').slice(0, 5), timezoneForRegion(booking.region));
+  return utc ? utc.getTime() : null;
+}
+function getBookingIST(booking) {
+  const utc = australianLocalToUTC(booking.trial_date, String(booking.trial_time || '').slice(0, 5), timezoneForRegion(booking.region));
+  return formatIST(utc);
+}
+function updateISTPreview() {
+  const date = $('cxDate').value, time = $('cxTime').value, region = $('cxRegion').value;
+  const output = $('cxIST');
+  if (!date || !time) { output.value = ''; output.placeholder = 'Select Australian date and time'; return; }
+  const utc = australianLocalToUTC(date, time, timezoneForRegion(region));
+  output.value = formatIST(utc);
+}
+
+const SUPABASE_URL = "https://ifmzvncxvaldygcaqpqj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dcKnj2C9hF1CPaNb7DryXw_bMp5HAsR";
+
+function init() {
+  connect(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+}async function connect(u,k){try{sb=window.supabase.createClient(u,k);if ($('setup')) $('setup').classList.add('hidden');let {data:{session}}=await sb.auth.getSession();if(session)await startApp(session.user);else $('login').classList.remove('hidden');sb.auth.onAuthStateChange(async(_e,s)=>{if(s&&!currentUser)await startApp(s.user)})}catch(e){$('globalMsg').textContent=e.message}}
+async function login(){let {data,error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error){$('loginMsg').textContent=error.message;return}await startApp(data.user)}
+async function logout(){await sb.auth.signOut();location.reload()}
+async function startApp(user){currentUser=user;let {data,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error||!data){$('loginMsg').textContent='Profile not found. Ask admin to create your team account.';return}profile=data;$('login').classList.add('hidden');$('app').classList.remove('hidden');$('userbar').classList.remove('hidden');$('who').textContent=data.full_name+' · '+data.role; if(data.role!=='admin'){$('agentsTab').classList.add('hidden');$('agents').classList.add('hidden')}await loadData()}
+async function loadData(){
+  // Admin gets all booking details through an admin-only RPC.
+  // Agents get their own customer details, while the shared calendar gets
+  // timing-only records for every agent through a restricted RPC.
+  let r;
+  if(profile.role==='admin'){
+    r=await sb.rpc('admin_list_bookings');
+  } else {
+    r=await sb.from('bookings').select('*').eq('agent_id',currentUser.id).order('trial_date').order('trial_time');
+  }
+  if(r.error){$('globalMsg').textContent='Could not load bookings: '+r.error.message;return}
+  bookings=r.data||[];
+
+  const team=await sb.rpc('get_team_agents');
+  if(team.error){$('globalMsg').textContent='Could not load team list: '+team.error.message;return}
+  agents=team.data||[];
+
+  if(profile.role==='admin'){
+    const prof=await sb.rpc('admin_list_profiles');
+    if(prof.error){$('globalMsg').textContent='Could not load agent profiles: '+prof.error.message;return}
+    agents=prof.data||[];
+  }
+
+  // Attach agent names locally so the bookings table can show the right owner.
+  const agentNames=new Map(agents.map(a=>[a.id,a.full_name]));
+  bookings=bookings.map(b=>({...b,profiles:{full_name:agentNames.get(b.agent_id)||'Unknown agent'}}));
+
+  const slots=await sb.rpc('get_shared_trial_slots');
+  if(slots.error){$('globalMsg').textContent='Could not load shared calendar slots: '+slots.error.message;return}
+  calendarSlots=slots.data||[];
+  renderAll();
+}
+function renderAll(){let today=new Date().toISOString().slice(0,10);$('sToday').textContent=bookings.filter(b=>b.trial_date===today).length;$('sUpcoming').textContent=bookings.filter(b=>b.trial_date>=today&&b.status==='Upcoming').length;$('sDone').textContent=bookings.filter(b=>b.status==='Trial Done').length;$('sMine').textContent=bookings.filter(b=>b.agent_id===currentUser.id).length;
+$('cxAgent').innerHTML=agents.map(a=>`<option value="${a.id}" ${a.id===currentUser.id?'selected':''}>${esc(a.full_name)}</option>`).join('');$('cxAgent').disabled=profile.role!=='admin';$('calendarFilter').innerHTML='<option value="">All agents</option>'+agents.map(a=>`<option value="${a.id}">${esc(a.full_name)}</option>`).join('');$('agentRows').innerHTML=agents.map(a=>`<tr><td>${esc(a.full_name)}</td><td>${esc(a.email||'')}</td><td>${a.role}</td><td>${new Date(a.created_at).toLocaleDateString()}</td></tr>`).join('');renderBookings();$('monthPick').value=new Date().toISOString().slice(0,7);renderCalendar()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderBookings(){let q=($('search').value||'').toLowerCase(),st=$('filterStatus').value;let rows=bookings.filter(b=>(!st||b.status===st)&&[b.customer_name,b.phone,b.profiles?.full_name,b.region].join(' ').toLowerCase().includes(q));$('bookingRows').innerHTML=rows.map(b=>`<tr><td><b>AU: ${b.trial_date}</b><br><span class="muted">${String(b.trial_time).slice(0,5)} (${esc(b.region||'')})</span><br><span class="success small">IST: ${getBookingIST(b)}</span></td><td>${esc(b.customer_name)}</td><td>${esc(b.phone)}</td><td>${esc(b.profiles?.full_name||'')}</td><td>${esc(b.region||'')}</td><td>${esc(b.device||'')}</td><td><select onchange="updateStatus('${b.id}',this.value)">${['Upcoming','Trial Done','Need to chase','Cancelled'].map(x=>`<option ${b.status===x?'selected':''}>${x}</option>`).join('')}</select></td><td><button class="danger small" onclick="deleteBooking('${b.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="8" class="muted">No bookings found.</td></tr>'}
+async function createBooking(){let date=$('cxDate').value,time=$('cxTime').value,phone=$('cxPhone').value.trim(),agent=$('cxAgent').value;if(!$('cxName').value.trim()||!phone||!date||!time){$('bookingMsg').textContent='Please complete all required fields.';return}let requestedInstant=australianLocalToUTC(date,time,timezoneForRegion($('cxRegion').value));let duplicate=calendarSlots.some(b=>b.status!=='Cancelled'&&getBookingISTInstant(b)===requestedInstant?.getTime());if(duplicate){$('bookingMsg').textContent='This date/time slot is already booked. Choose another slot.';return}let payload={customer_name:$('cxName').value.trim(),phone,trial_date:date,trial_time:time,region:$('cxRegion').value,device:$('cxDevice').value,usage:$('cxUsage').value,email:$('cxEmail').value,whatsapp:$('cxWhatsapp').value,notes:$('cxNotes').value,agent_id:profile.role==='admin'?agent:currentUser.id,created_by:currentUser.id,status:'Upcoming'};let {error}=await sb.from('bookings').insert(payload);if(error){
+  if(error.code==='23505' || /bookings_unique_active_trial_start_utc|duplicate key/i.test(error.message||'')){
+    $('bookingMsg').textContent='This exact trial time is already booked by another agent. Please choose a different time.';
+  } else {
+    $('bookingMsg').textContent=error.message;
+  }
+  return;
+}$('bookingMsg').textContent='Booking saved!';['cxName','cxPhone','cxDevice','cxUsage','cxEmail','cxWhatsapp','cxNotes'].forEach(x=>$(x).value='');await loadData();tab('bookings',document.querySelector('[data-tab="bookings"]'))}
+async function updateStatus(id,status){
+  let {error}=await sb.from('bookings').update({status}).eq('id',id);
+  if(error){
+    if(error.code==='23505' || /bookings_unique_active_trial_start_utc|duplicate key/i.test(error.message||'')){
+      alert('This slot is already occupied by another active booking. Choose another time or cancel the conflicting booking first.');
+    } else alert(error.message);
+  } else await loadData();
+}
+async function deleteBooking(id){if(!confirm('Delete this booking?'))return;let {error}=await sb.from('bookings').delete().eq('id',id);if(error)alert(error.message);else await loadData()}
+function tab(id,btn){['bookings','calendar','agents','new'].forEach(x=>$(x).classList.toggle('hidden',x!==id));document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function renderCalendar(){
+  let m=$('monthPick').value;if(!m)return;
+  let [y,mo]=m.split('-').map(Number),days=new Date(y,mo,0).getDate(),start=new Date(y,mo-1,1).getDay(),filter=$('calendarFilter').value;
+  const isAdmin=profile.role==='admin';
+  const source=isAdmin?bookings:calendarSlots;
+  let html=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="muted small">${x}</div>`).join('');
+  for(let i=0;i<start;i++)html+='<div></div>';
+  for(let d=1;d<=days;d++){
+    let ds=`${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    let list=source.filter(b=>b.trial_date===ds&&(!filter||b.agent_id===filter)&&b.status!=='Cancelled');
+    html+=`<div class="day ${ds===new Date().toISOString().slice(0,10)?'today':''}"><strong>${d}</strong>${list.map(b=>{
+      const au=String(b.trial_time).slice(0,5);
+      const ist=getBookingIST(b);
+      const owner=esc(b.profiles?.full_name||b.agent_name||'Agent');
+      if(isAdmin){
+        return `<div class="slot"><b>AU: ${au}</b> ${esc(b.customer_name||'')}<br><span class="success small">IST: ${ist}</span><br><span class="muted">${owner}</span></div>`;
+      }
+      return `<div class="slot"><b>AU: ${au}</b><br><span class="success small">IST: ${ist}</span><br><span class="muted">Booked · ${owner}</span></div>`;
+    }).join('')}</div>`;
+  }
+  $('calendarGrid').innerHTML=html;
+}
+// Keep the IST preview in sync with Australian date, time and state.
+['cxDate', 'cxTime', 'cxRegion'].forEach(id => $(id).addEventListener('change', updateISTPreview));
+
+init();
+</script></body></html>
