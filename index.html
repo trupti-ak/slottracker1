@@ -5,6 +5,7 @@
 <title>IPTV Trial Slot Tracker – Team Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com/"><link href="./IPTV Trial Slot Tracker – Team Edition_files/css2" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{--bg:#f7f3e9;--panel:#fffdf7;--panel2:#f0ebdf;--line:#e4dccb;--text:#242638;--muted:#77798a;--accent:#7656d8;--sky:#43a9dc;--green:#169b70;--red:#d94d5d;--yellow:#d5a02c;--pink:#df5b9e;--shadow:0 8px 24px rgba(58,48,28,.07)}
 html[data-theme=dark]{--bg:#101114;--panel:#191b20;--panel2:#24272e;--line:#373b45;--text:#f5f5f7;--muted:#a8abb5;--accent:#a18aff;--sky:#64c8f5;--green:#38ca99;--red:#ff7180;--yellow:#f0c75e;--pink:#f27cba;--shadow:0 8px 24px rgba(0,0,0,.24)}
@@ -19,7 +20,7 @@ html[data-theme=dark]{--bg:#101114;--panel:#191b20;--panel2:#24272e;--line:#373b
 #bookings th:last-child,#trialDone th:last-child{background:linear-gradient(120deg,#475569,#263449)}
 .followup-cell{min-width:190px}.followup-main{font-weight:800;color:var(--accent)}.followup-ist{display:block;color:var(--green);font-size:11px;font-weight:700}.notes-cell{min-width:190px;max-width:260px;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text)}.notes-empty{color:var(--muted);font-style:italic}
 tbody tr:hover{background:color-mix(in srgb,var(--accent) 5%,var(--panel))}.pill{background:color-mix(in srgb,var(--green) 15%,var(--panel));color:var(--green)}.notice{background:color-mix(in srgb,var(--sky) 13%,var(--panel));color:var(--text);border:1px solid var(--line);padding:12px;border-radius:10px}.slot,.day{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px}.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.day{min-height:90px}.day.today{border:2px solid var(--green)}.small{font-size:12px}.right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.quick-filters{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.quick-filters button{background:var(--panel2);color:var(--text);border:1px solid var(--line);font-size:12px;padding:7px 12px}.quick-filters button.active{background:linear-gradient(110deg,var(--accent),var(--sky));color:#fff}.bulkbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:11px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;margin:12px 0}.bulkbar select{max-width:280px}.duplicate-warning{display:none;background:color-mix(in srgb,var(--yellow) 18%,var(--panel));border:1px solid var(--yellow);padding:9px;border-radius:9px;margin-top:6px;color:var(--text);font-size:12px}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.calendar{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:560px){.wrap{padding:9px}.top{align-items:flex-start;flex-direction:column;padding:15px}.top-tools{width:100%;justify-content:space-between}.grid{gap:8px}.stat{padding:12px}.stat b{font-size:23px}.tabs{gap:4px}.tabs button{padding:8px;font-size:12px}.row{display:grid;grid-template-columns:1fr}.row>*{min-width:0}.calendar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.data-tools button{font-size:12px;padding:9px 12px}.data-tools label{font-size:12px}@media(max-width:560px){.data-tools{justify-content:flex-start!important}.data-tools button,.data-tools label{flex:1;text-align:center}}@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.calendar{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:560px){.wrap{padding:9px}.top{align-items:flex-start;flex-direction:column;padding:15px}.top-tools{width:100%;justify-content:space-between}.grid{gap:8px}.stat{padding:12px}.stat b{font-size:23px}.tabs{gap:4px}.tabs button{padding:8px;font-size:12px}.row{display:grid;grid-template-columns:1fr}.row>*{min-width:0}.calendar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body><div class="wrap">
 <header class="top"><div class="brand">📺 IPTV Trial Slot Tracker <span>TEAM EDITION</span></div><div class="top-tools"><button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">◐ Dark mode</button><div id="userbar" class="right hidden"><span id="who" class="muted small"></span><button class="secondary" onclick="logout()">Logout</button></div></div></header>
@@ -29,7 +30,14 @@ tbody tr:hover{background:color-mix(in srgb,var(--accent) 5%,var(--panel))}.pill
 <div class="stat"><span class="muted small">Today's bookings</span><b id="sToday">0</b></div><div class="stat"><span class="muted small">Upcoming</span><b id="sUpcoming">0</b></div><div class="stat"><span class="muted small">Completed trials</span><b id="sDone">0</b></div><div class="stat"><span class="muted small">My bookings</span><b id="sMine">0</b></div>
 </div>
 <div class="tabs" style="margin-top:18px"><button class="active" data-tab="bookings" onclick="tab('bookings',this)">Bookings</button><button data-tab="calendar" onclick="tab('calendar',this)">Live calendar</button><button data-tab="agents" id="agentsTab" onclick="tab('agents',this)">Agents</button><button data-tab="new" onclick="tab('new',this)">＋ New booking</button><button data-tab="trialDone" onclick="tab('trialDone',this)">✓ Trial Done</button></div>
-<section id="bookings" class="card"><div class="row"><div><h2>Trial bookings</h2><p class="muted small">Latest team bookings and follow-ups</p></div><div><label>Global search</label><input id="search" placeholder="Name, phone, agent, status..." oninput="renderBookings()"></div><div><label>Status</label><select id="filterStatus" onchange="renderBookings()"><option value="">All statuses</option></select></div></div><div class="quick-filters" id="quickFilters"><button type="button" class="active" onclick="setQuickFilter('all',this)">All dates</button><button type="button" onclick="setQuickFilter('today',this)">Today</button><button type="button" onclick="setQuickFilter('tomorrow',this)">Tomorrow</button><button type="button" onclick="setQuickFilter('overdue',this)">Overdue</button><button type="button" onclick="setQuickFilter('week',this)">This week</button></div><div id="bulkBar" class="bulkbar hidden"><b>Bulk status update</b><span id="selectedCount" class="muted">0 selected</span><select id="bulkStatus"></select><button onclick="bulkUpdateStatus()">Update selected</button><button class="secondary" onclick="clearSelected()">Clear</button></div><div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Follow up on this date</th><th>Notes</th><th>Actions</th></tr></thead><tbody id="bookingRows"></tbody></table></div></section>
+<section id="bookings" class="card"><div class="row"><div><h2>Trial bookings</h2><p class="muted small">Latest team bookings and follow-ups</p></div><div><label>Global search</label><input id="search" placeholder="Name, phone, agent, status..." oninput="renderBookings()"></div><div><label>Status</label><select id="filterStatus" onchange="renderBookings()"><option value="">All statuses</option></select></div></div><div class="right data-tools" style="justify-content:flex-end;gap:9px;flex-wrap:wrap;margin:12px 0">
+<button type="button" onclick="exportBookings('csv')" style="background:linear-gradient(110deg,#159b70,#22b8a0)">⬇ Export CSV</button>
+<button type="button" onclick="exportBookings('xlsx')" style="background:linear-gradient(110deg,#168eaa,#438bdc)">⬇ Export Excel</button>
+<label for="importFile" style="margin:0;padding:10px 15px;border-radius:10px;color:white;background:linear-gradient(110deg,#7656d8,#df5b9e);cursor:pointer;font-size:13px;font-weight:700;letter-spacing:0;text-transform:none">⬆ Import CSV / Excel</label>
+<input id="importFile" type="file" accept=".csv,.xlsx,.xls" style="display:none" onchange="importBookingsFile(this)">
+</div>
+<p class="muted small" id="importExportMsg" aria-live="polite">Import CSV/Excel to add bookings. Export downloads the bookings currently visible to your account.</p>
+<div class="quick-filters" id="quickFilters"><button type="button" class="active" onclick="setQuickFilter('all',this)">All dates</button><button type="button" onclick="setQuickFilter('today',this)">Today</button><button type="button" onclick="setQuickFilter('tomorrow',this)">Tomorrow</button><button type="button" onclick="setQuickFilter('overdue',this)">Overdue</button><button type="button" onclick="setQuickFilter('week',this)">This week</button></div><div id="bulkBar" class="bulkbar hidden"><b>Bulk status update</b><span id="selectedCount" class="muted">0 selected</span><select id="bulkStatus"></select><button onclick="bulkUpdateStatus()">Update selected</button><button class="secondary" onclick="clearSelected()">Clear</button></div><div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Follow up on this date</th><th>Notes</th><th>Actions</th></tr></thead><tbody id="bookingRows"></tbody></table></div></section>
 <section id="trialDone" class="card hidden">
 <div class="row"><div><h2>✓ Trial Done</h2><p class="muted small">Bookings marked as Trial Done by an agent or Admin appear here automatically.</p></div><div><label>Search completed trials</label><input id="doneSearch" placeholder="Name, phone, agent, region..." oninput="renderTrialDone()"></div></div>
 <div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Follow up on this date</th><th>Notes</th><th>Actions</th></tr></thead><tbody id="trialDoneRows"></tbody></table></div>
@@ -199,6 +207,114 @@ async function loadData(){
 function renderAll(){let today=new Date().toISOString().slice(0,10);$('sToday').textContent=bookings.filter(b=>b.trial_date===today).length;$('sUpcoming').textContent=bookings.filter(b=>b.trial_date>=today&&b.status==='Upcoming Trial').length;$('sDone').textContent=bookings.filter(b=>b.status==='Trial Done').length;$('sMine').textContent=bookings.filter(b=>b.agent_id===currentUser.id).length;
 populateStatusFilter();if($('bulkStatus'))$('bulkStatus').innerHTML=statusOptionsHtml();$('cxAgent').innerHTML=agents.map(a=>`<option value="${a.id}" ${a.id===currentUser.id?'selected':''}>${esc(a.full_name)}</option>`).join('');$('cxAgent').disabled=profile.role!=='admin';$('calendarFilter').innerHTML='<option value="">All agents</option>'+agents.map(a=>`<option value="${a.id}">${esc(a.full_name)}</option>`).join('');$('agentRows').innerHTML=agents.map(a=>`<tr><td>${esc(a.full_name)}</td><td>${esc(a.email||'')}</td><td>${a.role}</td><td>${new Date(a.created_at).toLocaleDateString()}</td></tr>`).join('');renderBookings();renderTrialDone();$('monthPick').value=new Date().toISOString().slice(0,7);renderCalendar()}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function normalizeImportHeader(value){
+  return String(value??'').trim().toLowerCase().replace(/[\s_\-\/()]+/g,'').replace(/[^a-z0-9]/g,'');
+}
+function pickImportValue(row, aliases){
+  for(const alias of aliases){const key=normalizeImportHeader(alias);if(Object.prototype.hasOwnProperty.call(row,key)&&row[key]!==''&&row[key]!==null&&row[key]!==undefined)return row[key]}
+  return '';
+}
+function importDateValue(value){
+  if(value===null||value===undefined||value==='')return '';
+  if(typeof value==='number'&&window.XLSX?.SSF){
+    const d=XLSX.SSF.parse_date_code(value);
+    if(d)return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
+  }
+  const raw=String(value).trim();
+  if(/^\d{4}-\d{2}-\d{2}/.test(raw))return raw.slice(0,10);
+  let m=raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  if(m){let a=+m[1],b=+m[2],y=m[3];let day,month;if(a>12){day=a;month=b}else if(b>12){month=a;day=b}else{day=a;month=b}return `${y}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`}
+  const d=new Date(raw);return isNaN(d)?'':dateKey(d);
+}
+function importTimeValue(value){
+  if(value===null||value===undefined||value==='')return '';
+  if(typeof value==='number'){const mins=Math.round(value*1440);return `${String(Math.floor(mins/60)%24).padStart(2,'0')}:${String(mins%60).padStart(2,'0')}`}
+  const raw=String(value).trim();
+  const m=raw.match(/(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)?/i);
+  if(!m)return '';
+  let h=+m[1],mi=+m[2];if(m[3]){const ap=m[3].toUpperCase();if(ap==='PM'&&h<12)h+=12;if(ap==='AM'&&h===12)h=0}
+  if(h>23||mi>59)return '';
+  return `${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}`;
+}
+function importStatusValue(value){
+  const v=String(value||'Upcoming Trial').trim();
+  return BOOKING_STATUSES.find(x=>x.toLowerCase()===v.toLowerCase())||'Upcoming Trial';
+}
+async function importBookingsFile(input){
+  const msg=$('importExportMsg'),file=input.files?.[0];if(!file)return;
+  try{
+    if(!window.XLSX)throw new Error('CSV/Excel reader library could not load. Check internet and refresh.');
+    msg.textContent='Reading file...';
+    const data=await file.arrayBuffer();
+    const workbook=XLSX.read(data,{type:'array',cellDates:false});
+    const sheet=workbook.Sheets[workbook.SheetNames[0]];
+    const rawRows=XLSX.utils.sheet_to_json(sheet,{defval:'',raw:true});
+    if(!rawRows.length)throw new Error('No data rows found in the first sheet.');
+    const rows=rawRows.map(source=>{
+      const normalized={};Object.entries(source).forEach(([k,v])=>normalized[normalizeImportHeader(k)]=v);
+      const name=pickImportValue(normalized,['customer_name','customer name','customer','name','cx name']);
+      const phone=String(pickImportValue(normalized,['phone','phone number','mobile','mobile number','cx phone'])||'').trim();
+      const date=importDateValue(pickImportValue(normalized,['trial_date','trial date','date','booking date','au date']));
+      const time=importTimeValue(pickImportValue(normalized,['trial_time','trial time','time','booking time','au time']));
+      const region=String(pickImportValue(normalized,['region','state'])||'NSW').trim().toUpperCase();
+      const followDate=importDateValue(pickImportValue(normalized,['follow_up_date','follow up date','followup date','need to connect on this date']));
+      const followTime=importTimeValue(pickImportValue(normalized,['follow_up_time','follow up time','followup time']));
+      const agentName=String(pickImportValue(normalized,['agent','agent name','owner'])||'').trim().toLowerCase();
+      const agentMatch=agents.find(a=>String(a.full_name||'').trim().toLowerCase()===agentName||String(a.email||'').trim().toLowerCase()===agentName);
+      return {
+        customer_name:String(name||'').trim(),phone,trial_date:date,trial_time:time,
+        region:['NSW','VIC','WA','SA','QLD','ACT','TAS','NT'].includes(region)?region:'NSW',
+        device:String(pickImportValue(normalized,['device','tv device','tv','device model'])||'').trim(),
+        usage:String(pickImportValue(normalized,['usage','package','usage package'])||'').trim(),
+        email:String(pickImportValue(normalized,['email','customer email'])||'').trim(),
+        whatsapp:String(pickImportValue(normalized,['whatsapp','whatsapp number'])||'').trim(),
+        notes:String(pickImportValue(normalized,['notes','note','comments'])||'').trim(),
+        follow_up_date:followDate||null,follow_up_time:followTime||null,
+        status:importStatusValue(pickImportValue(normalized,['status'])),
+        agent_id:profile.role==='admin'?(agentMatch?.id||currentUser.id):currentUser.id,
+        created_by:currentUser.id
+      };
+    });
+    const valid=rows.filter(r=>r.customer_name&&r.phone&&r.trial_date&&r.trial_time);
+    const invalid=rows.length-valid.length;
+    if(!valid.length)throw new Error('No valid rows. Required columns: Customer/Name, Phone, Trial Date and Trial Time.');
+    const duplicatePhones=valid.filter((r,i)=>valid.findIndex(x=>normPhone(x.phone)===normPhone(r.phone))!==i||bookings.some(b=>normPhone(b.phone)===normPhone(r.phone))).length;
+    const confirmText=`Import ${valid.length} booking(s) into Supabase?${invalid?`\\n${invalid} row(s) will be skipped because required fields are missing or invalid.`:''}${duplicatePhones?`\\n${duplicatePhones} row(s) have phone numbers already present in this file or tracker.`:''}\\n${profile.role==='admin'?'Admin imports will be assigned to matching agent names when found; unmatched names go to your account.':'All imported bookings will be assigned to your agent account.'}`;
+    if(!confirm(confirmText)){msg.textContent='Import cancelled.';return}
+    let inserted=0;
+    for(let i=0;i<valid.length;i+=100){
+      const batch=valid.slice(i,i+100);
+      const {error}=await sb.from('bookings').insert(batch);
+      if(error)throw new Error(`Import stopped after ${inserted} row(s): ${error.message}`);
+      inserted+=batch.length;
+    }
+    msg.textContent=`Successfully imported ${inserted} booking(s). ${invalid} invalid row(s) skipped.`;
+    input.value='';await loadData();
+  }catch(err){msg.textContent='Import failed: '+(err?.message||err);input.value=''}
+}
+function exportBookings(format){
+  try{
+    if(!window.XLSX)throw new Error('Excel export library could not load. Check internet and refresh.');
+    const exportRows=bookings.map(b=>({
+      'Customer':b.customer_name||'','Phone':b.phone||'','Agent':b.profiles?.full_name||'',
+      'Trial Date (AU)':b.trial_date||'','Trial Time (AU)':String(b.trial_time||'').slice(0,5),
+      'Trial Date & Time (IST)':getBookingIST(b),'Region':b.region||'','Device':b.device||'',
+      'Usage / Package':b.usage||'','Email':b.email||'','WhatsApp':b.whatsapp||'',
+      'Status':b.status||'','Follow Up Date (AU)':b.follow_up_date||'',
+      'Follow Up Time (AU)':String(b.follow_up_time||'').slice(0,5),
+      'Follow Up Date & Time (IST)':getFollowUpIST(b),'Notes':b.notes||''
+    }));
+    const ws=XLSX.utils.json_to_sheet(exportRows);
+    ws['!cols']=[{wch:24},{wch:18},{wch:22},{wch:16},{wch:15},{wch:27},{wch:12},{wch:18},{wch:18},{wch:28},{wch:18},{wch:24},{wch:18},{wch:18},{wch:28},{wch:45}];
+    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Bookings');
+    const stamp=new Date().toISOString().slice(0,10);
+    const filename=`BOATTV_Bookings_${stamp}.${format==='csv'?'csv':'xlsx'}`;
+    if(format==='csv')XLSX.writeFile(wb,filename,{bookType:'csv'});else XLSX.writeFile(wb,filename,{bookType:'xlsx'});
+    $('importExportMsg').textContent=`Exported ${exportRows.length} booking(s) to ${format.toUpperCase()}.`;
+  }catch(err){$('importExportMsg').textContent='Export failed: '+(err?.message||err)}
+}
+
 function renderBookings(){
  const q=($('search').value||'').toLowerCase().trim(),st=$('filterStatus').value;
  const rows=bookings.filter(b=>{const hay=[b.customer_name,b.phone,b.profiles?.full_name,b.region,b.device,b.status,b.notes,b.email,b.follow_up_date,b.follow_up_time].join(' ').toLowerCase();return (!st||b.status===st)&&hay.includes(q)&&matchesQuickDate(b)});
