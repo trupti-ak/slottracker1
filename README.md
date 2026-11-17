@@ -1,5 +1,7 @@
 1. Whatsapp connectivity
 
+need to add emotions 
+
 right hand side me alg section bana k fetures add krna he like agents profile and admin setting agents setting our main jo yaad ayaega vo dalege hower krne baad vaha dikhna chiye vo hide and unhide hona chahiye ek button pr click krne pr 
 
 3. Extra features jo add kar sakte hain
