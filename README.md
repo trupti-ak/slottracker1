@@ -1,4 +1,7 @@
 1. Whatsapp connectivity
+
+right hand side me alg section bana k fetures add krna he like agents profile and admin setting agents setting our main jo yaad ayaega vo dalege hower krne baad vaha dikhna chiye vo hide and unhide hona chahiye ek button pr click krne pr 
+
 3. Extra features jo add kar sakte hain
 Meri recommendation hai ki ye features bhi plan karein:
 1. Smart KPI Dashboard
@@ -25,17 +28,6 @@ Useful
 
 Date-wise, agent-wise, region-wise reports, CSV export aur conversion percentage.
 Useful
-
-
-
-
-
-
-
-
-
-
-
 
 
 6. Notification Centre
