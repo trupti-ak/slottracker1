@@ -6,26 +6,40 @@
 <link rel="preconnect" href="https://fonts.googleapis.com/"><link href="./IPTV Trial Slot Tracker – Team Edition_files/css2" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#0b1020;--panel:#121a2d;--panel2:#18233a;--line:#293650;--text:#edf2ff;--muted:#9aa8c1;--accent:#7c6cff;--green:#19c784;--red:#ff647c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:var(--accent);color:white;font-weight:600}button.secondary{background:#26344f}button.danger{background:#923448}.hidden{display:none!important}.wrap{max-width:1200px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}.brand{font-size:20px;font-weight:700}.brand span{color:var(--green)}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px}.login{max-width:430px;margin:9vh auto}.muted{color:var(--muted)}label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}input,select,textarea{width:100%;background:#0d1527;color:var(--text);border:1px solid var(--line);padding:12px;border-radius:9px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:var(--panel2);padding:15px;border-radius:12px}.stat b{display:block;font-size:25px;margin-top:7px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tabs button{background:#202c45}.tabs button.active{background:var(--accent)}.row{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.row>*{flex:1;min-width:150px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:760px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#203b35;color:#5ce0ac;font-size:11px}.notice{padding:12px;border-radius:10px;background:#2b2548;color:#d8d1ff;margin:12px 0}.error{color:#ff8798}.success{color:#5ce0ac}.slot{border:1px solid var(--line);padding:10px;border-radius:10px;margin:7px 0;background:var(--panel2)}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{min-height:90px;background:#0d1527;border:1px solid var(--line);border-radius:9px;padding:8px;font-size:12px}.day strong{display:block;margin-bottom:6px}.day.today{border-color:var(--green)}.small{font-size:12px}.right{display:flex;gap:8px;align-items:center}@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.wrap{padding:14px}.top{align-items:flex-start;flex-direction:column}.calendar{grid-template-columns:repeat(2,1fr)}}
+:root{--bg:#f7f3e9;--panel:#fffdf7;--panel2:#f0ebdf;--line:#e4dccb;--text:#242638;--muted:#77798a;--accent:#7656d8;--sky:#43a9dc;--green:#169b70;--red:#d94d5d;--yellow:#d5a02c;--pink:#df5b9e;--shadow:0 8px 24px rgba(58,48,28,.07)}
+html[data-theme=dark]{--bg:#101114;--panel:#191b20;--panel2:#24272e;--line:#373b45;--text:#f5f5f7;--muted:#a8abb5;--accent:#a18aff;--sky:#64c8f5;--green:#38ca99;--red:#ff7180;--yellow:#f0c75e;--pink:#f27cba;--shadow:0 8px 24px rgba(0,0,0,.24)}
+*{box-sizing:border-box}html,body{min-height:100%;background:var(--bg)}body{margin:0;color:var(--text);font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.5;transition:background .2s,color .2s}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 15px;background:linear-gradient(115deg,var(--accent),var(--sky));color:white;font-weight:650;transition:.18s}button:hover{filter:brightness(1.06);transform:translateY(-1px)}button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button.danger{background:linear-gradient(115deg,var(--red),#b93650)}.hidden{display:none!important}.wrap{width:100%;max-width:none;margin:0;padding:clamp(12px,1.5vw,26px)}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:20px;padding:18px 22px;border-radius:17px;background:linear-gradient(110deg,#654bd0,#8b56d8 52%,#df5b9e);box-shadow:var(--shadow);color:#fff}.brand{font-size:clamp(19px,2vw,25px);font-weight:800;color:#fff}.brand span{color:#fff;background:#ffffff30;padding:4px 8px;border-radius:7px;font-size:10px}.top-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}#who{color:#fff!important}.theme-toggle{background:#ffffff25;border:1px solid #ffffff60;color:#fff}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:clamp(15px,1.5vw,23px);margin-bottom:17px;box-shadow:var(--shadow);color:var(--text)}.login{max-width:460px;margin:8vh auto}.muted{color:var(--muted)}h1,h2,h3{color:var(--text)}label{display:block;color:var(--muted);font-size:11px;font-weight:750;letter-spacing:.45px;text-transform:uppercase;margin:12px 0 6px}input,select,textarea{width:100%;background:var(--panel);color:var(--text);border:1px solid var(--line);padding:11px 12px;border-radius:9px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:var(--shadow);position:relative;overflow:hidden}.stat:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent)}.stat:nth-child(2):before{background:var(--green)}.stat:nth-child(3):before{background:var(--yellow)}.stat:nth-child(4):before{background:var(--pink)}.stat b{display:block;font-size:28px;margin-top:7px;color:var(--text)}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0 15px;padding:6px;background:var(--panel2);border:1px solid var(--line);border-radius:12px}.tabs button{background:transparent;color:var(--muted)}.tabs button.active{background:linear-gradient(110deg,var(--accent),var(--sky));color:#fff}.row{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.row>*{flex:1;min-width:150px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:11px}table{border-collapse:collapse;width:100%;min-width:1120px;background:var(--panel)}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:13px;color:var(--text)}th{background:linear-gradient(115deg,#5b45c7,#287fcb 34%,#159b79 62%,#d44d9a);color:#fff;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.55px;white-space:nowrap}
+#bookings th:nth-child(1),#trialDone th:nth-child(1){background:linear-gradient(120deg,#654bd0,#438bdc)}
+#bookings th:nth-child(2),#trialDone th:nth-child(2){background:linear-gradient(120deg,#168eaa,#22a879)}
+#bookings th:nth-child(3),#trialDone th:nth-child(3){background:linear-gradient(120deg,#159b70,#76a92c)}
+#bookings th:nth-child(4),#trialDone th:nth-child(4){background:linear-gradient(120deg,#7656d8,#a14fc0)}
+#bookings th:nth-child(5),#trialDone th:nth-child(5){background:linear-gradient(120deg,#df8b27,#d65b48)}
+#bookings th:nth-child(6){background:linear-gradient(120deg,#df5b9e,#b94caa)}
+#bookings th:nth-child(7){background:linear-gradient(120deg,#d94d5d,#a93d72)}
+#bookings th:last-child,#trialDone th:last-child{background:linear-gradient(120deg,#475569,#263449)}
+.followup-cell{min-width:190px}.followup-main{font-weight:800;color:var(--accent)}.followup-ist{display:block;color:var(--green);font-size:11px;font-weight:700}.notes-cell{min-width:190px;max-width:260px;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text)}.notes-empty{color:var(--muted);font-style:italic}
+tbody tr:hover{background:color-mix(in srgb,var(--accent) 5%,var(--panel))}.pill{background:color-mix(in srgb,var(--green) 15%,var(--panel));color:var(--green)}.notice{background:color-mix(in srgb,var(--sky) 13%,var(--panel));color:var(--text);border:1px solid var(--line);padding:12px;border-radius:10px}.slot,.day{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px}.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.day{min-height:90px}.day.today{border:2px solid var(--green)}.small{font-size:12px}.right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.quick-filters{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.quick-filters button{background:var(--panel2);color:var(--text);border:1px solid var(--line);font-size:12px;padding:7px 12px}.quick-filters button.active{background:linear-gradient(110deg,var(--accent),var(--sky));color:#fff}.bulkbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:11px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;margin:12px 0}.bulkbar select{max-width:280px}.duplicate-warning{display:none;background:color-mix(in srgb,var(--yellow) 18%,var(--panel));border:1px solid var(--yellow);padding:9px;border-radius:9px;margin-top:6px;color:var(--text);font-size:12px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.calendar{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:560px){.wrap{padding:9px}.top{align-items:flex-start;flex-direction:column;padding:15px}.top-tools{width:100%;justify-content:space-between}.grid{gap:8px}.stat{padding:12px}.stat b{font-size:23px}.tabs{gap:4px}.tabs button{padding:8px;font-size:12px}.row{display:grid;grid-template-columns:1fr}.row>*{min-width:0}.calendar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body><div class="wrap">
-<header class="top"><div class="brand">📺 IPTV Trial Slot Tracker <span>TEAM EDITION</span></div><div id="userbar" class="right hidden"><span id="who" class="muted small"></span><button class="secondary" onclick="logout()">Logout</button></div></header>
+<header class="top"><div class="brand">📺 IPTV Trial Slot Tracker <span>TEAM EDITION</span></div><div class="top-tools"><button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">◐ Dark mode</button><div id="userbar" class="right hidden"><span id="who" class="muted small"></span><button class="secondary" onclick="logout()">Logout</button></div></div></header>
 <section id="login" class="card login"><h2>Welcome back</h2><p class="muted">Sign in with your team account.</p><label>Email</label><input id="email" type="email" placeholder="agent@company.com"><label>Password</label><input id="password" type="password" placeholder="Password"><button style="width:100%;margin-top:16px" onclick="login()">Login</button><p id="loginMsg" class="small error"></p></section>
 <main id="app" class="hidden">
 <div class="grid">
 <div class="stat"><span class="muted small">Today's bookings</span><b id="sToday">0</b></div><div class="stat"><span class="muted small">Upcoming</span><b id="sUpcoming">0</b></div><div class="stat"><span class="muted small">Completed trials</span><b id="sDone">0</b></div><div class="stat"><span class="muted small">My bookings</span><b id="sMine">0</b></div>
 </div>
 <div class="tabs" style="margin-top:18px"><button class="active" data-tab="bookings" onclick="tab('bookings',this)">Bookings</button><button data-tab="calendar" onclick="tab('calendar',this)">Live calendar</button><button data-tab="agents" id="agentsTab" onclick="tab('agents',this)">Agents</button><button data-tab="new" onclick="tab('new',this)">＋ New booking</button><button data-tab="trialDone" onclick="tab('trialDone',this)">✓ Trial Done</button></div>
-<section id="bookings" class="card"><div class="row"><div><h2>Trial bookings</h2><p class="muted small">Latest team bookings and follow-ups</p></div><div><label>Search</label><input id="search" placeholder="Name, phone, agent..." oninput="renderBookings()"></div><div><label>Status</label><select id="filterStatus" onchange="renderBookings()"><option value="">All statuses</option></select></div></div><div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Region</th><th>Device</th><th>Status</th><th></th></tr></thead><tbody id="bookingRows"></tbody></table></div></section>
+<section id="bookings" class="card"><div class="row"><div><h2>Trial bookings</h2><p class="muted small">Latest team bookings and follow-ups</p></div><div><label>Global search</label><input id="search" placeholder="Name, phone, agent, status..." oninput="renderBookings()"></div><div><label>Status</label><select id="filterStatus" onchange="renderBookings()"><option value="">All statuses</option></select></div></div><div class="quick-filters" id="quickFilters"><button type="button" class="active" onclick="setQuickFilter('all',this)">All dates</button><button type="button" onclick="setQuickFilter('today',this)">Today</button><button type="button" onclick="setQuickFilter('tomorrow',this)">Tomorrow</button><button type="button" onclick="setQuickFilter('overdue',this)">Overdue</button><button type="button" onclick="setQuickFilter('week',this)">This week</button></div><div id="bulkBar" class="bulkbar hidden"><b>Bulk status update</b><span id="selectedCount" class="muted">0 selected</span><select id="bulkStatus"></select><button onclick="bulkUpdateStatus()">Update selected</button><button class="secondary" onclick="clearSelected()">Clear</button></div><div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Follow up on this date</th><th>Notes</th><th>Actions</th></tr></thead><tbody id="bookingRows"></tbody></table></div></section>
 <section id="trialDone" class="card hidden">
 <div class="row"><div><h2>✓ Trial Done</h2><p class="muted small">Bookings marked as Trial Done by an agent or Admin appear here automatically.</p></div><div><label>Search completed trials</label><input id="doneSearch" placeholder="Name, phone, agent, region..." oninput="renderTrialDone()"></div></div>
-<div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Region</th><th>Device</th><th>Status</th><th>Actions</th></tr></thead><tbody id="trialDoneRows"></tbody></table></div>
+<div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Follow up on this date</th><th>Notes</th><th>Actions</th></tr></thead><tbody id="trialDoneRows"></tbody></table></div>
 </section>
 <section id="calendar" class="card hidden"><h2>Live trial calendar</h2><div class="row"><div><label>Month</label><input id="monthPick" type="month" onchange="renderCalendar()"></div><div><label>View</label><select id="calendarFilter" onchange="renderCalendar()"><option value="">All agents</option></select></div></div><div id="calendarGrid" class="calendar"></div></section>
 <section id="agents" class="card hidden"><h2>Agent profiles</h2><p class="muted small">Admin view of team members.</p><div class="tablewrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead><tbody id="agentRows"></tbody></table></div></section>
 <section id="new" class="card hidden"><h2 id="bookingFormTitle">Create trial booking</h2><input id="editingBookingId" type="hidden"><div class="grid" style="grid-template-columns:repeat(2,1fr)">
-<div><label>Customer name *</label><input id="cxName" required=""></div><div><label>Phone number *</label><input id="cxPhone" required=""></div><div><label>Trial date (Australia) *</label><input id="cxDate" type="date" required=""></div><div><label>Trial time (Australia) *</label><input id="cxTime" type="time" required=""></div><div style="grid-column:1/-1"><label>Converted IST time</label><input id="cxIST" type="text" placeholder="Select Australian date and time" readonly="" aria-live="polite" style="border-color:#6558e8;color:#5ce0ac;font-weight:600;background:#101a30"></div><div><label>Region</label><select id="cxRegion"><option>NSW</option><option>VIC</option><option>WA</option><option>SA</option><option>QLD</option><option>ACT</option><option>TAS</option><option>NT</option><option>Other</option></select></div><div><label>TV / Device</label><input id="cxDevice" placeholder="Samsung TV, Sony, Fire TV..."></div><div><label>Usage / Package</label><input id="cxUsage" placeholder="N+P, Kayo, etc."></div><div><label>Agent</label><select id="cxAgent"></select></div><div><label>Customer email</label><input id="cxEmail" type="email"></div><div><label>WhatsApp</label><input id="cxWhatsapp"></div></div><label>Notes</label><textarea id="cxNotes" rows="2"></textarea><div class="right" style="margin-top:14px"><button id="saveBookingBtn" onclick="createBooking()">Save booking</button><button id="cancelEditBtn" class="secondary hidden" onclick="cancelEdit()">Cancel edit</button></div><p id="bookingMsg" class="small"></p></section>
+<div><label>Customer name *</label><input id="cxName" required=""></div><div><label>Phone number *</label><input id="cxPhone" required="" oninput="checkDuplicatePhone()"><div id="duplicatePhoneWarning" class="duplicate-warning"></div></div><div><label>Trial date (Australia) *</label><input id="cxDate" type="date" required=""></div><div><label>Trial time (Australia) *</label><input id="cxTime" type="time" required=""></div><div style="grid-column:1/-1"><label>Converted IST time</label><input id="cxIST" type="text" placeholder="Select Australian date and time" readonly="" aria-live="polite" style="border-color:#6558e8;color:#5ce0ac;font-weight:600;background:#101a30"></div><div><label>Region</label><select id="cxRegion"><option>NSW</option><option>VIC</option><option>WA</option><option>SA</option><option>QLD</option><option>ACT</option><option>TAS</option><option>NT</option><option>Other</option></select></div><div><label>TV / Device</label><input id="cxDevice" placeholder="Samsung TV, Sony, Fire TV..."></div><div><label>Usage / Package</label><input id="cxUsage" placeholder="N+P, Kayo, etc."></div><div><label>Agent</label><select id="cxAgent"></select></div><div><label>Customer email</label><input id="cxEmail" type="email"></div><div><label>WhatsApp</label><input id="cxWhatsapp"></div>
+<div><label>Follow up on this date (Australia)</label><input id="cxFollowDate" type="date"></div><div><label>Follow up time (Australia)</label><input id="cxFollowTime" type="time"></div>
+<div style="grid-column:1/-1"><label>Follow-up converted IST date &amp; time</label><input id="cxFollowIST" type="text" placeholder="Select follow-up Australian date and time" readonly></div></div><label>Notes (visible to Agent &amp; Admin)</label><textarea id="cxNotes" rows="2" placeholder="Add follow-up notes here..."></textarea><div class="right" style="margin-top:14px"><button id="saveBookingBtn" onclick="createBooking()">Save booking</button><button id="cancelEditBtn" class="secondary hidden" onclick="cancelEdit()">Cancel edit</button></div><p id="bookingMsg" class="small"></p></section>
 </main><p id="globalMsg" class="small muted"></p></div>
 <script>
 let sb, currentUser, profile, bookings=[], agents=[], calendarSlots=[];
@@ -51,7 +65,22 @@ function populateStatusFilter() {
   filter.innerHTML = '<option value="">All statuses</option>' + statusOptionsHtml();
   filter.value = selected;
 }
+
 const $=id=>document.getElementById(id);
+let activeQuickFilter='all',selectedBookingIds=new Set();
+function applyTheme(t){document.documentElement.dataset.theme=t;const b=$('themeToggle');if(b)b.textContent=t==='dark'?'☀ Light mode':'◐ Dark mode';try{localStorage.setItem('boattv-theme',t)}catch(e){}}
+function toggleTheme(){applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')}
+(function(){let t='light';try{t=localStorage.getItem('boattv-theme')||'light'}catch(e){}document.documentElement.dataset.theme=t})();
+function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function setQuickFilter(k,btn){activeQuickFilter=k;document.querySelectorAll('#quickFilters button').forEach(x=>x.classList.toggle('active',x===btn));renderBookings()}
+function matchesQuickDate(b){if(activeQuickFilter==='all')return true;const d=new Date((b.trial_date||'')+'T00:00:00');if(isNaN(d))return false;const n=new Date();n.setHours(0,0,0,0);const t=new Date(n);t.setDate(t.getDate()+1);if(activeQuickFilter==='today')return dateKey(d)===dateKey(n);if(activeQuickFilter==='tomorrow')return dateKey(d)===dateKey(t);if(activeQuickFilter==='overdue')return d<n&&!['Sale','Not Interested','Trial Done'].includes(b.status);if(activeQuickFilter==='week'){const e=new Date(n);e.setDate(e.getDate()+7);return d>=n&&d<e}return true}
+function toggleBookingSelected(id,on){if(on)selectedBookingIds.add(String(id));else selectedBookingIds.delete(String(id));updateBulkBar()}
+function updateBulkBar(){const bar=$('bulkBar');if(!bar)return;const admin=profile?.role==='admin';bar.classList.toggle('hidden',!admin||!selectedBookingIds.size);const c=$('selectedCount');if(c)c.textContent=selectedBookingIds.size+' selected'}
+function clearSelected(){selectedBookingIds.clear();document.querySelectorAll('.booking-select').forEach(x=>x.checked=false);updateBulkBar()}
+async function bulkUpdateStatus(){if(profile?.role!=='admin'){alert('Admin access required');return}const ids=[...selectedBookingIds],status=$('bulkStatus')?.value;if(!ids.length||!status)return;if(!confirm(`Update ${ids.length} bookings to ${status}?`))return;const {error}=await sb.from('bookings').update({status}).in('id',ids);if(error){alert(error.message);return}clearSelected();await loadData()}
+function normPhone(x){return String(x||'').replace(/\D/g,'')}
+function checkDuplicatePhone(){const el=$('duplicatePhoneWarning');if(!el)return;const phone=normPhone($('cxPhone')?.value),editing=$('editingBookingId')?.value;const found=phone.length>=6?bookings.filter(b=>String(b.id)!==String(editing)&&normPhone(b.phone)===phone):[];el.style.display=found.length?'block':'none';el.textContent=found.length?`⚠ This phone number already appears in ${found.length} booking(s): ${found.slice(0,3).map(b=>b.customer_name).join(', ')}. Please verify before saving.`:''}
+
 
 // Australian state/territory -> IANA timezone. Intl applies the correct
 // Australian daylight-saving offset for the selected trial date.
@@ -108,19 +137,30 @@ function updateISTPreview() {
   const utc = australianLocalToUTC(date, time, timezoneForRegion(region));
   output.value = formatIST(utc);
 }
+function updateFollowISTPreview() {
+  const date=$('cxFollowDate')?.value, time=$('cxFollowTime')?.value, region=$('cxRegion')?.value;
+  const output=$('cxFollowIST'); if(!output)return;
+  if(!date||!time){output.value='';output.placeholder='Select follow-up Australian date and time';return}
+  output.value=formatIST(australianLocalToUTC(date,time,timezoneForRegion(region)));
+}
+function getFollowUpIST(b) {
+  if(!b.follow_up_date||!b.follow_up_time)return '';
+  return formatIST(australianLocalToUTC(b.follow_up_date,String(b.follow_up_time).slice(0,5),timezoneForRegion(b.region)));
+}
+function renderFollowUp(b) {
+  if(!b.follow_up_date&&!b.follow_up_time)return '<span class="muted notes-empty">Not scheduled</span>';
+  const au=[b.follow_up_date||'',String(b.follow_up_time||'').slice(0,5)].filter(Boolean).join(' · ');
+  const ist=getFollowUpIST(b);
+  return `<span class="followup-main">AU: ${esc(au)}</span>${ist?`<span class="followup-ist">IST: ${esc(ist)}</span>`:''}`;
+}
 
 const SUPABASE_URL = "https://ifmzvncxvaldygcaqpqj.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dcKnj2C9hF1CPaNb7DryXw_bMp5HAsR";
 
 function init() {
-  if (!window.supabase || typeof window.supabase.createClient !== 'function') {
-    $('globalMsg').textContent = 'Supabase library did not load. Check your internet connection or CDN access, then refresh this page.';
-    $('login').classList.remove('hidden');
-    return;
-  }
+  if (!window.supabase || typeof window.supabase.createClient !== 'function') { $('globalMsg').textContent='Supabase library did not load. Check internet connection and refresh.'; $('login').classList.remove('hidden'); return; }
   connect(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-}
-async function connect(u,k){try{if (!window.supabase || typeof window.supabase.createClient !== 'function') throw new Error('Supabase library is unavailable. Please refresh the page.'); sb=window.supabase.createClient(u,k);if ($('setup')) $('setup').classList.add('hidden');let {data:{session}}=await sb.auth.getSession();if(session)await startApp(session.user);else $('login').classList.remove('hidden');sb.auth.onAuthStateChange(async(_e,s)=>{if(s&&!currentUser)await startApp(s.user)})}catch(e){$('globalMsg').textContent=e.message}}
+}async function connect(u,k){try{sb=window.supabase.createClient(u,k);if ($('setup')) $('setup').classList.add('hidden');let {data:{session}}=await sb.auth.getSession();if(session)await startApp(session.user);else $('login').classList.remove('hidden');sb.auth.onAuthStateChange(async(_e,s)=>{if(s&&!currentUser)await startApp(s.user)})}catch(e){$('globalMsg').textContent=e.message}}
 async function login(){let {data,error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error){$('loginMsg').textContent=error.message;return}await startApp(data.user)}
 async function logout(){await sb.auth.signOut();location.reload()}
 async function startApp(user){currentUser=user;let {data,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error||!data){$('loginMsg').textContent='Profile not found. Ask admin to create your team account.';return}profile=data;$('login').classList.add('hidden');$('app').classList.remove('hidden');$('userbar').classList.remove('hidden');$('who').textContent=data.full_name+' · '+data.role; if(data.role!=='admin'){$('agentsTab').classList.add('hidden');$('agents').classList.add('hidden')}await loadData()}
@@ -157,27 +197,40 @@ async function loadData(){
   renderAll();
 }
 function renderAll(){let today=new Date().toISOString().slice(0,10);$('sToday').textContent=bookings.filter(b=>b.trial_date===today).length;$('sUpcoming').textContent=bookings.filter(b=>b.trial_date>=today&&b.status==='Upcoming Trial').length;$('sDone').textContent=bookings.filter(b=>b.status==='Trial Done').length;$('sMine').textContent=bookings.filter(b=>b.agent_id===currentUser.id).length;
-populateStatusFilter();$('cxAgent').innerHTML=agents.map(a=>`<option value="${a.id}" ${a.id===currentUser.id?'selected':''}>${esc(a.full_name)}</option>`).join('');$('cxAgent').disabled=profile.role!=='admin';$('calendarFilter').innerHTML='<option value="">All agents</option>'+agents.map(a=>`<option value="${a.id}">${esc(a.full_name)}</option>`).join('');$('agentRows').innerHTML=agents.map(a=>`<tr><td>${esc(a.full_name)}</td><td>${esc(a.email||'')}</td><td>${a.role}</td><td>${new Date(a.created_at).toLocaleDateString()}</td></tr>`).join('');renderBookings();renderTrialDone();$('monthPick').value=new Date().toISOString().slice(0,7);renderCalendar()}
+populateStatusFilter();if($('bulkStatus'))$('bulkStatus').innerHTML=statusOptionsHtml();$('cxAgent').innerHTML=agents.map(a=>`<option value="${a.id}" ${a.id===currentUser.id?'selected':''}>${esc(a.full_name)}</option>`).join('');$('cxAgent').disabled=profile.role!=='admin';$('calendarFilter').innerHTML='<option value="">All agents</option>'+agents.map(a=>`<option value="${a.id}">${esc(a.full_name)}</option>`).join('');$('agentRows').innerHTML=agents.map(a=>`<tr><td>${esc(a.full_name)}</td><td>${esc(a.email||'')}</td><td>${a.role}</td><td>${new Date(a.created_at).toLocaleDateString()}</td></tr>`).join('');renderBookings();renderTrialDone();$('monthPick').value=new Date().toISOString().slice(0,7);renderCalendar()}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderBookings(){let q=($('search').value||'').toLowerCase(),st=$('filterStatus').value;let rows=bookings.filter(b=>(!st||b.status===st)&&[b.customer_name,b.phone,b.profiles?.full_name,b.region].join(' ').toLowerCase().includes(q));$('bookingRows').innerHTML=rows.map(b=>`<tr><td><b>AU: ${b.trial_date}</b><br><span class="muted">${String(b.trial_time).slice(0,5)} (${esc(b.region||'')})</span><br><span class="success small">IST: ${getBookingIST(b)}</span></td><td>${esc(b.customer_name)}</td><td>${esc(b.phone)}</td><td>${esc(b.profiles?.full_name||'')}</td><td>${esc(b.region||'')}</td><td>${esc(b.device||'')}</td><td><select onchange="updateStatus('${b.id}',this.value)">${statusOptionsHtml(b.status)}</select></td><td><div class="right"><button class="secondary small" onclick="editBooking('${b.id}')">Edit</button><button class="danger small" onclick="deleteBooking('${b.id}')">Delete</button></div></td></tr>`).join('')||'<tr><td colspan="8" class="muted">No bookings found.</td></tr>'}
+function renderBookings(){
+ const q=($('search').value||'').toLowerCase().trim(),st=$('filterStatus').value;
+ const rows=bookings.filter(b=>{const hay=[b.customer_name,b.phone,b.profiles?.full_name,b.region,b.device,b.status,b.notes,b.email,b.follow_up_date,b.follow_up_time].join(' ').toLowerCase();return (!st||b.status===st)&&hay.includes(q)&&matchesQuickDate(b)});
+ const isAdmin=profile?.role==='admin';const head=document.querySelector('#bookings thead tr');
+ if(head)head.innerHTML=(isAdmin?'<th><input type="checkbox" aria-label="Select all visible" onchange="document.querySelectorAll(\'.booking-select\').forEach(c=>{c.checked=this.checked;toggleBookingSelected(c.value,this.checked)})"></th>':'')+'<th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Follow up on this date</th><th>Notes</th><th>Actions</th>';
+ $('bookingRows').innerHTML=rows.map(b=>`<tr>${isAdmin?`<td><input class="booking-select" type="checkbox" value="${esc(b.id)}" onchange="toggleBookingSelected(this.value,this.checked)"></td>`:''}
+ <td><b>AU: ${esc(b.trial_date)}</b><br><span class="muted">${String(b.trial_time).slice(0,5)} (${esc(b.region||'')})</span><br><span class="success small">IST: ${getBookingIST(b)}</span></td>
+ <td><b>${esc(b.customer_name)}</b></td><td>${esc(b.phone)}</td><td>${esc(b.profiles?.full_name||'')}</td>
+ <td><select aria-label="Status for ${esc(b.customer_name)}" onchange="updateStatus('${b.id}',this.value)">${statusOptionsHtml(b.status)}</select></td>
+ <td class="followup-cell">${renderFollowUp(b)}</td><td class="notes-cell">${b.notes?esc(b.notes):'<span class="notes-empty">No notes added</span>'}</td>
+ <td><div class="right"><button class="secondary small" onclick="editBooking('${b.id}')">Edit</button><button class="danger small" onclick="deleteBooking('${b.id}')">Delete</button></div></td></tr>`).join('')||`<tr><td colspan="${isAdmin?9:8}" class="muted">No bookings match these filters.</td></tr>`;
+}
 
 function renderTrialDone(){
   const q=($('doneSearch')?.value||'').trim().toLowerCase();
   const rows=bookings.filter(b=>b.status==='Trial Done'&&
-    [b.customer_name,b.phone,b.profiles?.full_name,b.region,b.device].join(' ').toLowerCase().includes(q));
+    [b.customer_name,b.phone,b.profiles?.full_name,b.region,b.device,b.notes,b.follow_up_date].join(' ').toLowerCase().includes(q));
   $('trialDoneRows').innerHTML=rows.map(b=>`<tr>
     <td><b>AU: ${esc(b.trial_date||'')}</b><br><span class="muted">${esc(String(b.trial_time||'').slice(0,5))} (${esc(b.region||'')})</span><br><span class="success small">IST: ${esc(getBookingIST(b))}</span></td>
-    <td>${esc(b.customer_name||'')}</td><td>${esc(b.phone||'')}</td><td>${esc(b.profiles?.full_name||'')}</td>
-    <td>${esc(b.region||'')}</td><td>${esc(b.device||'')}</td>
+    <td><b>${esc(b.customer_name||'')}</b></td><td>${esc(b.phone||'')}</td><td>${esc(b.profiles?.full_name||'')}</td>
     <td><select aria-label="Change status for ${esc(b.customer_name||'booking')}" onchange="updateStatus('${b.id}',this.value)">${statusOptionsHtml(b.status)}</select></td>
+    <td class="followup-cell">${renderFollowUp(b)}</td><td class="notes-cell">${b.notes?esc(b.notes):'<span class="notes-empty">No notes added</span>'}</td>
     <td><button class="secondary small" onclick="editBooking('${b.id}')">Edit</button></td>
   </tr>`).join('')||'<tr><td colspan="8" class="muted">No completed trials found.</td></tr>';
 }
+
 async function createBooking(){
   const date=$('cxDate').value, time=$('cxTime').value, phone=$('cxPhone').value.trim(), agent=$('cxAgent').value;
   const editingId=$('editingBookingId').value;
   const existing=editingId?bookings.find(b=>String(b.id)===String(editingId)):null;
   if(!$('cxName').value.trim()||!phone||!date||!time){$('bookingMsg').textContent='Please complete all required fields.';return}
+  const pnorm=phone.replace(/\D/g,'');const duplicate=pnorm.length>=6&&bookings.some(b=>String(b.id)!==String(editingId)&&String(b.phone||'').replace(/\D/g,'')===pnorm);if(duplicate&&!confirm('This phone number already exists in another booking. Continue anyway?'))return;
   // When editing an existing booking, notes/customer-detail-only changes must
   // not be blocked by that booking's own shared-calendar slot. Only check for
   // conflicts if its Australian date, time, or region actually changed.
@@ -197,7 +250,7 @@ async function createBooking(){
     });
     if(duplicate){$('bookingMsg').textContent='This date/time slot is already booked. Choose another slot.';return}
   }
-  const payload={customer_name:$('cxName').value.trim(),phone,trial_date:date,trial_time:time,region:$('cxRegion').value,device:$('cxDevice').value,usage:$('cxUsage').value,email:$('cxEmail').value,whatsapp:$('cxWhatsapp').value,notes:$('cxNotes').value,agent_id:profile.role==='admin'?agent:(existing?.agent_id||currentUser.id),status:existing?.status||'Upcoming Trial'};
+  const payload={customer_name:$('cxName').value.trim(),phone,trial_date:date,trial_time:time,region:$('cxRegion').value,device:$('cxDevice').value,usage:$('cxUsage').value,email:$('cxEmail').value,whatsapp:$('cxWhatsapp').value,notes:$('cxNotes').value,follow_up_date:$('cxFollowDate').value||null,follow_up_time:$('cxFollowTime').value||null,agent_id:profile.role==='admin'?agent:(existing?.agent_id||currentUser.id),status:existing?.status||'Upcoming Trial'};
   let result;
   if(editingId) result=await sb.from('bookings').update(payload).eq('id',editingId);
   else {payload.created_by=currentUser.id;result=await sb.from('bookings').insert(payload)}
@@ -219,14 +272,14 @@ function editBooking(id){
   $('cxName').value=b.customer_name||'';$('cxPhone').value=b.phone||'';
   $('cxDate').value=b.trial_date||'';$('cxTime').value=String(b.trial_time||'').slice(0,5);
   $('cxRegion').value=b.region||'NSW';$('cxDevice').value=b.device||'';$('cxUsage').value=b.usage||'';
-  $('cxEmail').value=b.email||'';$('cxWhatsapp').value=b.whatsapp||'';$('cxNotes').value=b.notes||'';
+  $('cxEmail').value=b.email||'';$('cxWhatsapp').value=b.whatsapp||'';$('cxNotes').value=b.notes||'';$('cxFollowDate').value=b.follow_up_date||'';$('cxFollowTime').value=String(b.follow_up_time||'').slice(0,5);
   if(profile.role==='admin')$('cxAgent').value=b.agent_id;
   $('bookingFormTitle').textContent='Edit existing trial booking';$('saveBookingBtn').textContent='Update existing booking';
   $('cancelEditBtn').classList.remove('hidden');
   const newTabButton=document.querySelector('[data-tab="new"]');
   if(newTabButton)newTabButton.textContent='✎ Edit booking';
   $('bookingMsg').textContent='You are editing the existing booking. Changes will update this record; no new booking will be created.';
-  updateISTPreview();tab('new',newTabButton);
+  updateISTPreview();updateFollowISTPreview();tab('new',newTabButton);
   $('cxName').focus();
 }
 function cancelEdit(){resetBookingForm();$('bookingMsg').textContent='Edit cancelled.'}
@@ -234,7 +287,7 @@ function resetBookingForm(){
   $('editingBookingId').value='';
   const newTabButton=document.querySelector('[data-tab="new"]');
   if(newTabButton)newTabButton.textContent='＋ New booking';
-  ['cxName','cxPhone','cxDate','cxTime','cxDevice','cxUsage','cxEmail','cxWhatsapp','cxNotes'].forEach(id=>$(id).value='');
+  ['cxName','cxPhone','cxDate','cxTime','cxDevice','cxUsage','cxEmail','cxWhatsapp','cxNotes','cxFollowDate','cxFollowTime','cxFollowIST'].forEach(id=>$(id).value='');
   $('cxRegion').value='NSW';$('cxIST').value='';$('bookingFormTitle').textContent='Create trial booking';
   $('saveBookingBtn').textContent='Save booking';$('cancelEditBtn').classList.add('hidden');
   if(profile.role==='admin')$('cxAgent').value=currentUser.id;
@@ -273,8 +326,10 @@ function renderCalendar(){
 }
 // Keep the IST preview in sync with Australian date, time and state.
 ['cxDate', 'cxTime', 'cxRegion'].forEach(id => $(id).addEventListener('change', updateISTPreview));
+['cxFollowDate','cxFollowTime','cxRegion'].forEach(id => $(id).addEventListener('change', updateFollowISTPreview));
 
 init();
 </script>
+</body>
 </body>
 </html>
