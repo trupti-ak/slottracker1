@@ -40,10 +40,111 @@ label{font-size:10px;letter-spacing:.1em;font-weight:850;color:var(--muted)}inpu
 @media(max-width:560px){.wrap{padding:10px}.top{padding:17px;border-radius:18px}.brand{line-height:1.5}.card{padding:15px;border-radius:16px}.tabs{overflow-x:auto;flex-wrap:nowrap}.tabs button{white-space:nowrap;flex:0 0 auto}.stat{padding:13px}.stat b{font-size:25px}.data-tools{padding:8px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+.admin-only.hidden{display:none!important}
+/* BOATTV premium workspace upgrade */
+:root{
+ --bg:#f5f0ff;--panel:#fff;--panel2:#f0eaff;--line:#e5dafa;--text:#251b3b;--muted:#786d91;
+ --accent:#8054e8;--sky:#bb5bdc;--pink:#ed72b5;--green:#239b78;--red:#dc5276;
+ --shadow:0 14px 38px rgba(77,48,135,.10)
+}
+html[data-theme=dark]{
+ --bg:#14111d;--panel:#201a2d;--panel2:#2b233b;--line:#443653;--text:#f7f0ff;--muted:#b6a9c9;
+ --accent:#ad82ff;--sky:#cf70ed;--pink:#f18ac5;--green:#58d5aa;--red:#ff7899;
+ --shadow:0 16px 42px rgba(0,0,0,.32)
+}
+body{transition:background .28s ease,color .28s ease}
+.card,.stat,.tabs,.day,.slot,button,input,select,textarea{transition:background-color .25s ease,border-color .25s ease,color .25s ease,box-shadow .22s ease,transform .22s ease}
+.card:hover{box-shadow:0 18px 46px rgba(77,48,135,.13)}
+.stat:hover{transform:translateY(-4px)}
+button:focus-visible,.workspace-item:focus-visible{outline:3px solid color-mix(in srgb,var(--pink) 65%,transparent);outline-offset:3px}
+.theme-toggle{width:42px;height:42px;padding:0!important;display:inline-grid;place-items:center;border-radius:50%!important;background:#ffffff25!important;border:1px solid #ffffff75!important;font-size:21px;box-shadow:0 5px 16px #30145a25!important}
+.theme-toggle:hover{transform:rotate(-8deg) scale(1.06)!important}
+.top-tools{gap:12px}
+.workspace-toggle{position:fixed;right:18px;top:48%;z-index:1200;width:48px;height:48px;padding:0;border-radius:17px;background:linear-gradient(140deg,#7650e7,#d75cae);box-shadow:0 12px 28px #673bbd55;font-size:20px}
+.workspace-sidebar{position:fixed;z-index:1300;right:0;top:0;height:100dvh;width:min(340px,88vw);padding:23px 18px;display:flex;flex-direction:column;background:var(--panel);border-left:1px solid var(--line);box-shadow:-18px 0 55px #160b3028;transform:translateX(110%);transition:transform .32s cubic-bezier(.2,.8,.2,1);color:var(--text)}
+.workspace-sidebar.open{transform:translateX(0)}
+.workspace-head{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 4px 20px;border-bottom:1px solid var(--line)}
+.workspace-head h2{margin:4px 0 0;font-size:22px;letter-spacing:-.04em}
+.workspace-kicker{font-size:9px;font-weight:850;letter-spacing:.16em;color:var(--accent)}
+.workspace-close{width:34px;height:34px;padding:0;border-radius:11px;background:var(--panel2);color:var(--text);box-shadow:none;font-size:22px}
+.workspace-nav{padding-top:14px;overflow:auto}
+.workspace-group{margin:4px 0}
+.workspace-item{width:100%;display:flex;align-items:center;gap:12px;padding:13px 12px;text-align:left;border-radius:13px;background:transparent;color:var(--text);box-shadow:none;font-weight:700}
+.workspace-item:hover{background:var(--panel2);color:var(--accent);transform:translateX(-3px);box-shadow:none}
+.ws-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--accent) 13%,var(--panel));color:var(--accent);font-size:17px}
+.ws-chevron{margin-left:auto;color:var(--muted);font-size:20px}
+.workspace-submenu{display:none;padding:2px 0 8px 54px}
+.workspace-submenu.open{display:grid;gap:4px;animation:wsReveal .18s ease}
+.workspace-submenu button{background:transparent;color:var(--muted);box-shadow:none;text-align:left;padding:9px 10px;font-size:12px}
+.workspace-submenu button:hover{background:var(--panel2);color:var(--accent);box-shadow:none;transform:translateX(2px)}
+.workspace-foot{margin-top:auto;padding:14px 5px 4px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+.workspace-backdrop{position:fixed;inset:0;z-index:1250;background:#120b20a0;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.workspace-backdrop.show{opacity:1;visibility:visible}
+.workspace-panel{position:fixed;z-index:1400;right:22px;top:82px;width:min(390px,calc(100vw - 28px));max-height:calc(100dvh - 110px);overflow:auto;padding:19px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);color:var(--text);animation:wsReveal .2s ease}
+.workspace-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.workspace-panel-head h3{margin:0;font-size:18px}
+.workspace-metric{padding:12px;border:1px solid var(--line);background:var(--panel2);border-radius:12px}
+.workspace-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}
+.workspace-metric b{display:block;font-size:22px;color:var(--accent)}
+.toast-stack{position:fixed;z-index:2000;top:18px;right:18px;width:min(370px,calc(100vw - 28px));display:grid;gap:9px;pointer-events:none}
+.boattv-toast{display:flex;align-items:flex-start;gap:11px;padding:13px 15px;border:1px solid var(--line);border-radius:15px;background:var(--panel);color:var(--text);box-shadow:0 14px 40px #25113b24;pointer-events:auto;animation:toastIn .28s ease both}
+.boattv-toast.success{border-left:4px solid var(--accent)}
+.boattv-toast.error{border-left:4px solid var(--red)}
+.toast-icon{font-size:19px;line-height:1.2}
+.toast-copy{font-size:13px;font-weight:650;line-height:1.45}
+.boattv-toast.leaving{animation:toastOut .22s ease forwards}
+.section-enter{animation:sectionFade .28s ease both}
+@keyframes toastIn{from{opacity:0;transform:translate3d(18px,-7px,0)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translate3d(18px,-5px,0)}}
+@keyframes sectionFade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes wsReveal{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+@media(max-width:560px){.workspace-toggle{right:10px;top:auto;bottom:16px;width:46px;height:46px}.toast-stack{top:10px;right:10px}.workspace-panel{right:10px;top:65px}.workspace-sidebar{width:min(320px,90vw)}}
+@media(prefers-reduced-motion:reduce){.workspace-sidebar,.workspace-backdrop,.boattv-toast,.workspace-panel,.workspace-submenu{animation:none!important;transition:none!important}.card,.stat,button{transition:none!important}}
+
 </style></head>
 <body><div class="wrap">
-<header class="top"><div class="brand">📺 BOATTV <span>TEAM HUB ✦</span></div><div class="top-tools"><button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">◐ Dark mode</button><div id="userbar" class="right hidden"><span id="who" class="muted small"></span><button class="secondary" onclick="logout()">Logout</button></div></div></header>
+<header class="top"><div class="brand">📺 BOATTV <span>TEAM HUB ✦</span></div><div class="top-tools"><button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Switch to dark mode" title="Switch theme"><span id="themeIcon" aria-hidden="true">☾</span></button><div id="userbar" class="right hidden"><span id="who" class="muted small"></span><button class="secondary" onclick="logout()">Logout</button></div></div></header>
 <section id="login" class="card login"><h2>Welcome back</h2><p class="muted">Sign in with your team account.</p><label>Email</label><input id="email" type="email" placeholder="agent@company.com"><label>Password</label><input id="password" type="password" placeholder="Password"><button style="width:100%;margin-top:16px" onclick="login()">Login</button><p id="loginMsg" class="small error"></p></section>
+
+<aside id="workspaceSidebar" class="workspace-sidebar" aria-label="Workspace navigation" aria-hidden="true">
+  <div class="workspace-head">
+    <div><span class="workspace-kicker">BOATTV WORKSPACE</span><h2>Quick access</h2></div>
+    <button class="workspace-close" type="button" onclick="toggleWorkspace(false)" aria-label="Close workspace menu">×</button>
+  </div>
+  <nav class="workspace-nav">
+    <button class="workspace-item" type="button" onclick="openWorkspacePanel('profile')"><span class="ws-icon">♙</span><span>My Profile</span><span class="ws-chevron">›</span></button>
+    <div id="adminWorkspaceGroup" class="workspace-group">
+      <button class="workspace-item" type="button" onclick="toggleWorkspaceSubmenu('agentManagementSub')"><span class="ws-icon">♧</span><span>Agent Management</span><span class="ws-chevron">⌄</span></button>
+      <div id="agentManagementSub" class="workspace-submenu"><button type="button" onclick="workspaceGo('agents')">Agent profiles</button></div>
+    </div>
+    <div id="agentSettingsGroup" class="workspace-group">
+      <button class="workspace-item" type="button" onclick="toggleWorkspaceSubmenu('agentSettingsSub')"><span class="ws-icon">⚙</span><span>Agent Settings</span><span class="ws-chevron">⌄</span></button>
+      <div id="agentSettingsSub" class="workspace-submenu"><button type="button" onclick="openWorkspacePanel('profile')">Account details</button></div>
+    </div>
+    <div id="adminSettingsGroup" class="workspace-group admin-only">
+      <button class="workspace-item" type="button" onclick="toggleWorkspaceSubmenu('adminSettingsSub')"><span class="ws-icon">✧</span><span>Admin Settings</span><span class="ws-chevron">⌄</span></button>
+      <div id="adminSettingsSub" class="workspace-submenu"><button type="button" onclick="openWorkspacePanel('admin')">Admin account</button></div>
+    </div>
+    <div id="reportsGroup" class="workspace-group admin-only">
+      <button class="workspace-item" type="button" onclick="toggleWorkspaceSubmenu('reportsSub')"><span class="ws-icon">▥</span><span>Reports &amp; Analytics</span><span class="ws-chevron">⌄</span></button>
+      <div id="reportsSub" class="workspace-submenu"><button type="button" onclick="openWorkspacePanel('reports')">Booking overview</button></div>
+    </div>
+    <div class="workspace-group">
+      <button class="workspace-item" type="button" onclick="toggleWorkspaceSubmenu('dataManagementSub')"><span class="ws-icon">⇅</span><span>Data Management</span><span class="ws-chevron">⌄</span></button>
+      <div id="dataManagementSub" class="workspace-submenu"><button type="button" onclick="workspaceGo('bookings')">Import / Export bookings</button></div>
+    </div>
+  </nav>
+  <div class="workspace-foot">Your access is based on your BOATTV account role.</div>
+</aside>
+<button id="workspaceToggle" class="workspace-toggle" type="button" onclick="toggleWorkspace()" aria-label="Open workspace menu" title="Workspace menu"><span aria-hidden="true">☰</span></button>
+<div id="workspaceBackdrop" class="workspace-backdrop" onclick="toggleWorkspace(false)" aria-hidden="true"></div>
+<div id="workspacePanel" class="workspace-panel hidden" role="dialog" aria-modal="false" aria-labelledby="workspacePanelTitle">
+  <div class="workspace-panel-head"><h3 id="workspacePanelTitle">Workspace</h3><button type="button" class="workspace-close" onclick="closeWorkspacePanel()" aria-label="Close panel">×</button></div>
+  <div id="workspacePanelBody"></div>
+</div>
+<div id="toastStack" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
+
 <main id="app" class="hidden">
 <div class="grid">
 <div class="stat"><span class="muted small">Today's bookings</span><b id="sToday">0</b></div><div class="stat"><span class="muted small">Upcoming</span><b id="sUpcoming">0</b></div><div class="stat"><span class="muted small">Completed trials</span><b id="sDone">0</b></div><div class="stat"><span class="muted small">My bookings</span><b id="sMine">0</b></div>
@@ -95,16 +196,80 @@ function populateStatusFilter() {
 
 const $=id=>document.getElementById(id);
 let activeQuickFilter='all',selectedBookingIds=new Set();
-function applyTheme(t){document.documentElement.dataset.theme=t;const b=$('themeToggle');if(b)b.textContent=t==='dark'?'☀ Light mode':'◐ Dark mode';try{localStorage.setItem('boattv-theme',t)}catch(e){}}
+function applyTheme(t){
+  document.documentElement.dataset.theme=t;
+  const icon=$('themeIcon'),button=$('themeToggle');
+  if(icon)icon.textContent=t==='dark'?'☀':'☾';
+  if(button){button.setAttribute('aria-label',t==='dark'?'Switch to light mode':'Switch to dark mode');button.title=t==='dark'?'Switch to light mode':'Switch to dark mode'}
+  try{localStorage.setItem('boattv-theme',t)}catch(e){}
+}
 function toggleTheme(){applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')}
-(function(){let t='light';try{t=localStorage.getItem('boattv-theme')||'light'}catch(e){}document.documentElement.dataset.theme=t})();
+(function(){let t='light';try{t=localStorage.getItem('boattv-theme')||'light'}catch(e){}applyTheme(t)})();
+
+const TOAST_MESSAGES={
+ bookingSaved:'✨ Great work! Another trial is successfully scheduled.',
+ bookingUpdated:'👏 Nice! Your booking details are up to date.',
+ trialCompleted:'🎉 Well done! Another successful trial completed.',
+ agentAdded:'🎉 Awesome! A new teammate has joined your team.',
+ exportCompleted:'💫 Your report is ready. Keep up the great work!',
+ importCompleted:'🚀 Great work! Your bookings have been imported successfully.'
+};
+function showToast(message,type='success'){
+  const stack=$('toastStack');if(!stack)return;
+  const item=document.createElement('div');item.className='boattv-toast '+(type==='error'?'error':'success');
+  const icon=document.createElement('span');icon.className='toast-icon';icon.textContent=type==='error'?'⚠':'✓';
+  const copy=document.createElement('div');copy.className='toast-copy';copy.textContent=message;
+  item.append(icon,copy);stack.appendChild(item);
+  window.setTimeout(()=>{item.classList.add('leaving');window.setTimeout(()=>item.remove(),240)},3600);
+}
+function notifyAction(key){if(TOAST_MESSAGES[key])showToast(TOAST_MESSAGES[key],'success')}
+function toggleWorkspace(force){
+  const side=$('workspaceSidebar'),back=$('workspaceBackdrop'),btn=$('workspaceToggle');
+  if(!side)return;
+  const open=typeof force==='boolean'?force:!side.classList.contains('open');
+  side.classList.toggle('open',open);back.classList.toggle('show',open);
+  side.setAttribute('aria-hidden',String(!open));btn?.setAttribute('aria-expanded',String(open));
+}
+function toggleWorkspaceSubmenu(id){
+  const target=$(id);if(!target)return;
+  target.classList.toggle('open');
+}
+function workspaceGo(id){
+  toggleWorkspace(false);
+  const button=document.querySelector('[data-tab="'+id+'"]');
+  if(button)tab(id,button);
+  if(id==='bookings')document.getElementById('importFile')?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+}
+function closeWorkspacePanel(){$('workspacePanel')?.classList.add('hidden')}
+function openWorkspacePanel(kind){
+  const panel=$('workspacePanel'),title=$('workspacePanelTitle'),body=$('workspacePanelBody');
+  if(!panel||!profile)return;
+  let content='';
+  if(kind==='profile'||kind==='admin'){
+    if(kind==='admin'&&profile.role!=='admin'){showToast('Admin access is required for this section.','error');return}
+    title.textContent=kind==='admin'?'Admin account':'My Profile';
+    content=`<div class="workspace-metric"><span class="muted small">Name</span><b>${esc(profile.full_name||'—')}</b></div><div class="workspace-metric" style="margin-top:9px"><span class="muted small">Email</span><div>${esc(profile.email||currentUser?.email||'—')}</div></div><div class="workspace-metric" style="margin-top:9px"><span class="muted small">Role</span><div>${esc(profile.role||'Agent')}</div></div>`;
+  }else if(kind==='reports'){
+    if(profile.role!=='admin'){showToast('Admin access is required for reports.','error');return}
+    const total=bookings.length,done=bookings.filter(b=>b.status==='Trial Done').length,upcoming=bookings.filter(b=>b.status==='Upcoming Trial').length,agentsCount=agents.length;
+    title.textContent='Reports & Analytics';
+    content=`<p class="muted small">Live overview calculated from the bookings currently available to your account.</p><div class="workspace-metrics"><div class="workspace-metric"><span class="muted small">Total bookings</span><b>${total}</b></div><div class="workspace-metric"><span class="muted small">Completed trials</span><b>${done}</b></div><div class="workspace-metric"><span class="muted small">Upcoming trials</span><b>${upcoming}</b></div><div class="workspace-metric"><span class="muted small">Team members</span><b>${agentsCount}</b></div></div>`;
+  }else{return}
+  body.innerHTML=content;panel.classList.remove('hidden');
+}
+function syncWorkspacePermissions(){
+  const admin=profile?.role==='admin';
+  ['adminWorkspaceGroup','adminSettingsGroup','reportsGroup'].forEach(id=>$(id)?.classList.toggle('hidden',!admin));
+  $('agentSettingsGroup')?.classList.toggle('hidden',admin);
+}
+
 function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
 function setQuickFilter(k,btn){activeQuickFilter=k;document.querySelectorAll('#quickFilters button').forEach(x=>x.classList.toggle('active',x===btn));renderBookings()}
 function matchesQuickDate(b){if(activeQuickFilter==='all')return true;const d=new Date((b.trial_date||'')+'T00:00:00');if(isNaN(d))return false;const n=new Date();n.setHours(0,0,0,0);const t=new Date(n);t.setDate(t.getDate()+1);if(activeQuickFilter==='today')return dateKey(d)===dateKey(n);if(activeQuickFilter==='tomorrow')return dateKey(d)===dateKey(t);if(activeQuickFilter==='overdue')return d<n&&!['Sale','Not Interested','Trial Done'].includes(b.status);if(activeQuickFilter==='week'){const e=new Date(n);e.setDate(e.getDate()+7);return d>=n&&d<e}return true}
 function toggleBookingSelected(id,on){if(on)selectedBookingIds.add(String(id));else selectedBookingIds.delete(String(id));updateBulkBar()}
 function updateBulkBar(){const bar=$('bulkBar');if(!bar)return;const admin=profile?.role==='admin';bar.classList.toggle('hidden',!admin||!selectedBookingIds.size);const c=$('selectedCount');if(c)c.textContent=selectedBookingIds.size+' selected'}
 function clearSelected(){selectedBookingIds.clear();document.querySelectorAll('.booking-select').forEach(x=>x.checked=false);updateBulkBar()}
-async function bulkUpdateStatus(){if(profile?.role!=='admin'){alert('Admin access required');return}const ids=[...selectedBookingIds],status=$('bulkStatus')?.value;if(!ids.length||!status)return;if(!confirm(`Update ${ids.length} bookings to ${status}?`))return;const {error}=await sb.from('bookings').update({status}).in('id',ids);if(error){alert(error.message);return}clearSelected();await loadData()}
+async function bulkUpdateStatus(){if(profile?.role!=='admin'){alert('Admin access required');return}const ids=[...selectedBookingIds],status=$('bulkStatus')?.value;if(!ids.length||!status)return;if(!confirm(`Update ${ids.length} bookings to ${status}?`))return;const {error}=await sb.from('bookings').update({status}).in('id',ids);if(error){showToast('Could not update selected bookings: '+error.message,'error');return}clearSelected();showToast('Selected booking statuses have been updated.');await loadData()}
 function normPhone(x){return String(x||'').replace(/\D/g,'')}
 function checkDuplicatePhone(){const el=$('duplicatePhoneWarning');if(!el)return;const phone=normPhone($('cxPhone')?.value),editing=$('editingBookingId')?.value;const found=phone.length>=6?bookings.filter(b=>String(b.id)!==String(editing)&&normPhone(b.phone)===phone):[];el.style.display=found.length?'block':'none';el.textContent=found.length?`⚠ This phone number already appears in ${found.length} booking(s): ${found.slice(0,3).map(b=>b.customer_name).join(', ')}. Please verify before saving.`:''}
 
@@ -190,7 +355,7 @@ function init() {
 }async function connect(u,k){try{sb=window.supabase.createClient(u,k);if ($('setup')) $('setup').classList.add('hidden');let {data:{session}}=await sb.auth.getSession();if(session)await startApp(session.user);else $('login').classList.remove('hidden');sb.auth.onAuthStateChange(async(_e,s)=>{if(s&&!currentUser)await startApp(s.user)})}catch(e){$('globalMsg').textContent=e.message}}
 async function login(){let {data,error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error){$('loginMsg').textContent=error.message;return}await startApp(data.user)}
 async function logout(){await sb.auth.signOut();location.reload()}
-async function startApp(user){currentUser=user;let {data,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error||!data){$('loginMsg').textContent='Profile not found. Ask admin to create your team account.';return}profile=data;$('login').classList.add('hidden');$('app').classList.remove('hidden');$('userbar').classList.remove('hidden');$('who').textContent=data.full_name+' · '+data.role; if(data.role!=='admin'){$('agentsTab').classList.add('hidden');$('agents').classList.add('hidden')}await loadData()}
+async function startApp(user){currentUser=user;let {data,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error||!data){$('loginMsg').textContent='Profile not found. Ask admin to create your team account.';return}profile=data;syncWorkspacePermissions();$('login').classList.add('hidden');$('app').classList.remove('hidden');$('userbar').classList.remove('hidden');$('who').textContent=data.full_name+' · '+data.role; if(data.role!=='admin'){$('agentsTab').classList.add('hidden');$('agents').classList.add('hidden')}await loadData()}
 async function loadData(){
   // Admin gets all booking details through an admin-only RPC.
   // Agents get their own customer details, while the shared calendar gets
@@ -308,9 +473,9 @@ async function importBookingsFile(input){
       if(error)throw new Error(`Import stopped after ${inserted} row(s): ${error.message}`);
       inserted+=batch.length;
     }
-    msg.textContent=`Successfully imported ${inserted} booking(s). ${invalid} invalid row(s) skipped.`;
+    msg.textContent=`Successfully imported ${inserted} booking(s). ${invalid} invalid row(s) skipped.`;notifyAction('importCompleted');
     input.value='';await loadData();
-  }catch(err){msg.textContent='Import failed: '+(err?.message||err);input.value=''}
+  }catch(err){msg.textContent='Import failed: '+(err?.message||err);showToast('Import failed: '+(err?.message||'Please check the file and try again.'),'error');input.value=''}
 }
 function exportBookings(format){
   try{
@@ -330,8 +495,8 @@ function exportBookings(format){
     const stamp=new Date().toISOString().slice(0,10);
     const filename=`BOATTV_Bookings_${stamp}.${format==='csv'?'csv':'xlsx'}`;
     if(format==='csv')XLSX.writeFile(wb,filename,{bookType:'csv'});else XLSX.writeFile(wb,filename,{bookType:'xlsx'});
-    $('importExportMsg').textContent=`Exported ${exportRows.length} booking(s) to ${format.toUpperCase()}.`;
-  }catch(err){$('importExportMsg').textContent='Export failed: '+(err?.message||err)}
+    $('importExportMsg').textContent=`Exported ${exportRows.length} booking(s) to ${format.toUpperCase()}.`;notifyAction('exportCompleted');
+  }catch(err){$('importExportMsg').textContent='Export failed: '+(err?.message||err);showToast('Export failed: '+(err?.message||'Please try again.'),'error')}
 }
 
 function renderBookings(){
@@ -383,7 +548,7 @@ async function createBooking(){
         slotBookingId!==String(editingId) &&
         getBookingISTInstant(b)===requestedInstant?.getTime();
     });
-    if(duplicate){$('bookingMsg').textContent='This date/time slot is already booked. Choose another slot.';return}
+    if(duplicate){$('bookingMsg').textContent='This date/time slot is already booked. Choose another slot.';showToast('That trial time is already booked. Please choose another slot.','error');return}
   }
   const payload={customer_name:$('cxName').value.trim(),phone,trial_date:date,trial_time:time,region:$('cxRegion').value,device:$('cxDevice').value,usage:$('cxUsage').value,email:$('cxEmail').value,whatsapp:$('cxWhatsapp').value,notes:$('cxNotes').value,follow_up_date:$('cxFollowDate').value||null,follow_up_time:$('cxFollowTime').value||null,agent_id:profile.role==='admin'?agent:(existing?.agent_id||currentUser.id),status:existing?.status||'Upcoming Trial'};
   let result;
@@ -393,9 +558,10 @@ async function createBooking(){
   if(error){
     if(error.code==='23505'||/bookings_unique_active_trial_start_utc|duplicate key/i.test(error.message||'')) $('bookingMsg').textContent='This exact trial time is already booked by another agent. Please choose a different time.';
     else $('bookingMsg').textContent=error.message;
+    showToast('Could not save booking: '+(error.message||'Please try again.'),'error');
     return;
   }
-  $('bookingMsg').textContent=editingId?'Booking updated successfully!':'Booking saved!';
+  $('bookingMsg').textContent=editingId?'Booking updated successfully!':'Booking saved!';notifyAction(editingId?'bookingUpdated':'bookingSaved');
   resetBookingForm();
   await loadData();
   tab('bookings',document.querySelector('[data-tab="bookings"]'));
@@ -432,11 +598,11 @@ async function updateStatus(id,status){
   if(error){
     if(error.code==='23505' || /bookings_unique_active_trial_start_utc|duplicate key/i.test(error.message||'')){
       alert('This slot is already occupied by another active booking. Choose another time or cancel the conflicting booking first.');
-    } else alert(error.message);
-  } else await loadData();
+    } else showToast('Could not update booking: '+error.message,'error');
+  } else {if(status==='Trial Done')notifyAction('trialCompleted');else showToast('Booking status updated successfully.');await loadData();}
 }
-async function deleteBooking(id){if(!confirm('Delete this booking?'))return;let {error}=await sb.from('bookings').delete().eq('id',id);if(error)alert(error.message);else await loadData()}
-function tab(id,btn){['bookings','calendar','agents','new','trialDone'].forEach(x=>$(x).classList.toggle('hidden',x!==id));document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='trialDone')renderTrialDone()}
+async function deleteBooking(id){if(!confirm('Delete this booking?'))return;let {error}=await sb.from('bookings').delete().eq('id',id);if(error)showToast('Could not delete booking: '+error.message,'error');else {showToast('Booking deleted successfully.');await loadData()}}
+function tab(id,btn){['bookings','calendar','agents','new','trialDone'].forEach(x=>$(x).classList.toggle('hidden',x!==id));const active=$(id);if(active){active.classList.remove('section-enter');void active.offsetWidth;active.classList.add('section-enter')}document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='trialDone')renderTrialDone()}
 function renderCalendar(){
   let m=$('monthPick').value;if(!m)return;
   let [y,mo]=m.split('-').map(Number),days=new Date(y,mo,0).getDate(),start=new Date(y,mo-1,1).getDay(),filter=$('calendarFilter').value;
@@ -465,6 +631,5 @@ function renderCalendar(){
 
 init();
 </script>
-</body>
 </body>
 </html>
