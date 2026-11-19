@@ -104,6 +104,15 @@ button:focus-visible,.workspace-item:focus-visible{outline:3px solid color-mix(i
 
 
 .made-footer{margin:24px auto 10px;text-align:center;color:var(--muted);font-size:12px;letter-spacing:.2px;opacity:.9}.made-footer span{color:#ec4899;margin:0 2px}.made-footer strong{color:var(--text);font-weight:650}
+
+
+/* CX follow-up additions */
+#followups .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+#followupModal{display:block}
+#followupModal.hidden{display:none!important}
+#followHistoryList{max-height:180px;overflow:auto;margin-top:8px}
+.follow-history-item{padding:9px 10px;border:1px solid var(--line);border-radius:10px;margin:7px 0;background:var(--panel2)}
+@media(max-width:800px){#followups .grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body><div class="wrap">
 <header class="top"><div class="brand">📺 BOATTV <span>TEAM HUB ✦</span></div><div class="top-tools"><button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Switch to dark mode" title="Switch theme"><span id="themeIcon" aria-hidden="true">☾</span></button><div id="userbar" class="right hidden"><span id="who" class="muted small"></span><button class="secondary" onclick="logout()">Logout</button></div></div></header>
@@ -151,7 +160,7 @@ button:focus-visible,.workspace-item:focus-visible{outline:3px solid color-mix(i
 <div class="grid">
 <div class="stat"><span class="muted small">Today's bookings</span><b id="sToday">0</b></div><div class="stat"><span class="muted small">Upcoming</span><b id="sUpcoming">0</b></div><div class="stat"><span class="muted small">Completed trials</span><b id="sDone">0</b></div><div class="stat"><span class="muted small">My bookings</span><b id="sMine">0</b></div>
 </div>
-<div class="tabs" style="margin-top:18px"><button class="active" data-tab="bookings" onclick="tab('bookings',this)">Bookings</button><button data-tab="calendar" onclick="tab('calendar',this)">Live calendar</button><button data-tab="agents" id="agentsTab" onclick="tab('agents',this)">Agents</button><button data-tab="new" onclick="tab('new',this)">＋ New booking</button><button data-tab="trialDone" onclick="tab('trialDone',this)">✓ Trial Done</button></div>
+<div class="tabs" style="margin-top:18px"><button class="active" data-tab="bookings" onclick="tab('bookings',this)">Bookings</button><button data-tab="calendar" onclick="tab('calendar',this)">Live calendar</button><button data-tab="agents" id="agentsTab" onclick="tab('agents',this)">Agents</button><button data-tab="new" onclick="tab('new',this)">＋ New booking</button><button data-tab="trialDone" onclick="tab('trialDone',this)">✓ Trial Done</button><button data-tab="followups" onclick="tab('followups',this)">☎ CX Follow-up</button></div>
 <section id="bookings" class="card"><div class="row"><div><h2>Trial bookings</h2><p class="muted small">Latest team bookings and follow-ups</p></div><div><label>Global search</label><input id="search" placeholder="Name, phone, agent, status..." oninput="renderBookings()"></div><div><label>Status</label><select id="filterStatus" onchange="renderBookings()"><option value="">All statuses</option></select></div></div><div class="right data-tools" style="justify-content:flex-end;gap:9px;flex-wrap:wrap;margin:12px 0">
 <button type="button" onclick="exportBookings('csv')" style="background:linear-gradient(110deg,#159b70,#22b8a0)">⬇ Export CSV</button>
 <button type="button" onclick="exportBookings('xlsx')" style="background:linear-gradient(110deg,#168eaa,#438bdc)">⬇ Export Excel</button>
@@ -164,6 +173,42 @@ button:focus-visible,.workspace-item:focus-visible{outline:3px solid color-mix(i
 <div class="row"><div><h2>✓ Trial Done</h2><p class="muted small">Bookings marked as Trial Done by an agent or Admin appear here automatically.</p></div><div><label>Search completed trials</label><input id="doneSearch" placeholder="Name, phone, agent, region..." oninput="renderTrialDone()"></div></div>
 <div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Phone</th><th>Agent</th><th>Status</th><th>Follow up on this date</th><th>Notes</th><th>Actions</th></tr></thead><tbody id="trialDoneRows"></tbody></table></div>
 </section>
+<section id="followups" class="card hidden">
+  <div class="row">
+    <div><h2>☎ CX Follow-up</h2><p class="muted small">Your daily customer connection list. Admin can view the complete team workload.</p></div>
+    <div><label>Search CX / phone / agent</label><input id="followSearch" placeholder="Search name, phone or agent..." oninput="renderFollowups()"></div>
+    <div><label>Follow-up category</label><select id="followCategory" onchange="renderFollowups()"><option value="">All categories</option><option value="Trial Connection">Technician / Trial Connection</option><option value="CX Feedback">CX Feedback</option><option value="Signup Chasing">Signup Chasing</option></select></div>
+    <div id="followAgentWrap"><label>Agent</label><select id="followAgent" onchange="renderFollowups()"><option value="">All agents</option></select></div>
+  </div>
+  <div class="quick-filters" id="followQuickFilters">
+    <button type="button" class="active" data-follow-filter="today" onclick="setFollowFilter('today',this)">Today</button>
+    <button type="button" data-follow-filter="tomorrow" onclick="setFollowFilter('tomorrow',this)">Tomorrow</button>
+    <button type="button" data-follow-filter="overdue" onclick="setFollowFilter('overdue',this)">Overdue</button>
+    <button type="button" data-follow-filter="week" onclick="setFollowFilter('week',this)">This Week</button>
+    <button type="button" data-follow-filter="completed" onclick="setFollowFilter('completed',this)">Today Completed</button>
+    <button type="button" data-follow-filter="unset" onclick="setFollowFilter('unset',this)">Date Not Set</button>
+    <button type="button" data-follow-filter="all" onclick="setFollowFilter('all',this)">All Pending</button>
+  </div>
+  <div class="grid" style="margin:12px 0">
+    <div class="stat"><span class="muted small">Pending</span><b id="fuPendingCount">0</b></div>
+    <div class="stat"><span class="muted small">Overdue</span><b id="fuOverdueCount">0</b></div>
+    <div class="stat"><span class="muted small">Date not set</span><b id="fuUnsetCount">0</b></div>
+    <div class="stat"><span class="muted small">Completed today</span><b id="fuCompletedCount">0</b></div>
+  </div>
+  <div class="tablewrap"><table><thead><tr><th>Customer</th><th>Phone</th><th>Agent</th><th>Category</th><th>Current Status</th><th>Follow-up (AU)</th><th>Last Notes</th><th>Action</th></tr></thead><tbody id="followupRows"></tbody></table></div>
+  <div style="margin-top:18px"><h3 style="margin-bottom:5px">Agent-wise follow-up overview</h3><p class="muted small">Visible to admin. Counts are based on active follow-up statuses.</p><div class="tablewrap"><table style="min-width:600px"><thead><tr><th>Agent</th><th>Pending</th><th>Overdue</th><th>Completed Today</th></tr></thead><tbody id="followAgentRows"></tbody></table></div></div>
+</section>
+<div id="followupModal" class="workspace-panel hidden" role="dialog" aria-modal="true" aria-labelledby="followModalTitle" style="position:fixed;z-index:1500;left:50%;top:50%;right:auto;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 24px));max-height:90dvh">
+  <div class="workspace-panel-head"><div><h3 id="followModalTitle">Update CX follow-up</h3><p id="followModalCustomer" class="muted small"></p></div><button type="button" class="workspace-close" onclick="closeFollowupModal()">×</button></div>
+  <input id="followBookingId" type="hidden">
+  <label>Call outcome</label><select id="followOutcome"><option>Connected</option><option>No Answer</option><option>Busy</option><option>Call Back Requested</option><option>Technical Issue</option><option>Trial Not Activated</option><option>Feedback Received</option><option>Interested - Signup Pending</option><option>Not Interested</option><option>Sale Completed</option><option>Other</option></select>
+  <label>Update existing status</label><select id="followNewStatus"></select>
+  <label>Notes / customer response</label><textarea id="followNotes" rows="3" placeholder="Add what happened during this call..."></textarea>
+  <div class="grid" style="grid-template-columns:1fr 1fr"><div><label>Next follow-up date (Australia) – optional</label><input id="nextFollowDate" type="date"></div><div><label>Next follow-up time – optional</label><input id="nextFollowTime" type="time"></div></div>
+  <p class="muted small">No date or time? Save the attempt anyway. The CX will remain visible under Date Not Set if its status still requires follow-up.</p>
+  <div class="right" style="margin-top:14px"><button type="button" onclick="saveFollowupAttempt()">Save follow-up</button><button type="button" class="secondary" onclick="closeFollowupModal()">Cancel</button></div>
+  <div style="margin-top:18px"><h3>Previous follow-up history</h3><div id="followHistoryList" class="small muted">Loading history...</div></div>
+</div>
 <section id="calendar" class="card hidden"><h2>Live trial calendar</h2><div class="row"><div><label>Month</label><input id="monthPick" type="month" onchange="renderCalendar()"></div><div><label>View</label><select id="calendarFilter" onchange="renderCalendar()"><option value="">All agents</option></select></div></div><div id="calendarGrid" class="calendar"></div></section>
 <section id="agents" class="card hidden"><h2>Agent profiles</h2><p class="muted small">Admin view of team members.</p><div class="tablewrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead><tbody id="agentRows"></tbody></table></div></section>
 <section id="new" class="card hidden"><h2 id="bookingFormTitle">Create trial booking</h2><input id="editingBookingId" type="hidden"><div class="grid" style="grid-template-columns:repeat(2,1fr)">
@@ -198,6 +243,7 @@ function populateStatusFilter() {
 
 const $=id=>document.getElementById(id);
 let activeQuickFilter='all',selectedBookingIds=new Set();
+let followHistory=[],activeFollowFilter='today';
 function applyTheme(t){
   document.documentElement.dataset.theme=t;
   const icon=$('themeIcon'),button=$('themeToggle');
@@ -384,6 +430,7 @@ async function loadData(){
   // Attach agent names locally so the bookings table can show the right owner.
   const agentNames=new Map(agents.map(a=>[a.id,a.full_name]));
   bookings=bookings.map(b=>({...b,profiles:{full_name:agentNames.get(b.agent_id)||'Unknown agent'}}));
+  await loadFollowupHistory();
 
   const slots=await sb.rpc('get_shared_trial_slots');
   if(slots.error){$('globalMsg').textContent='Could not load shared calendar slots: '+slots.error.message;return}
@@ -391,7 +438,7 @@ async function loadData(){
   renderAll();
 }
 function renderAll(){let today=new Date().toISOString().slice(0,10);$('sToday').textContent=bookings.filter(b=>b.trial_date===today).length;$('sUpcoming').textContent=bookings.filter(b=>b.trial_date>=today&&b.status==='Upcoming Trial').length;$('sDone').textContent=bookings.filter(b=>b.status==='Trial Done').length;$('sMine').textContent=bookings.filter(b=>b.agent_id===currentUser.id).length;
-populateStatusFilter();if($('bulkStatus'))$('bulkStatus').innerHTML=statusOptionsHtml();$('cxAgent').innerHTML=agents.map(a=>`<option value="${a.id}" ${a.id===currentUser.id?'selected':''}>${esc(a.full_name)}</option>`).join('');$('cxAgent').disabled=profile.role!=='admin';$('calendarFilter').innerHTML='<option value="">All agents</option>'+agents.map(a=>`<option value="${a.id}">${esc(a.full_name)}</option>`).join('');$('agentRows').innerHTML=agents.map(a=>`<tr><td>${esc(a.full_name)}</td><td>${esc(a.email||'')}</td><td>${a.role}</td><td>${new Date(a.created_at).toLocaleDateString()}</td></tr>`).join('');renderBookings();renderTrialDone();$('monthPick').value=new Date().toISOString().slice(0,7);renderCalendar()}
+populateStatusFilter();if($('bulkStatus'))$('bulkStatus').innerHTML=statusOptionsHtml();$('cxAgent').innerHTML=agents.map(a=>`<option value="${a.id}" ${a.id===currentUser.id?'selected':''}>${esc(a.full_name)}</option>`).join('');$('cxAgent').disabled=profile.role!=='admin';$('calendarFilter').innerHTML='<option value="">All agents</option>'+agents.map(a=>`<option value="${a.id}">${esc(a.full_name)}</option>`).join('');$('agentRows').innerHTML=agents.map(a=>`<tr><td>${esc(a.full_name)}</td><td>${esc(a.email||'')}</td><td>${a.role}</td><td>${new Date(a.created_at).toLocaleDateString()}</td></tr>`).join('');renderBookings();renderTrialDone();renderFollowups();$('monthPick').value=new Date().toISOString().slice(0,7);renderCalendar()}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 function normalizeImportHeader(value){
@@ -501,6 +548,129 @@ function exportBookings(format){
   }catch(err){$('importExportMsg').textContent='Export failed: '+(err?.message||err);showToast('Export failed: '+(err?.message||'Please try again.'),'error')}
 }
 
+
+const FOLLOWUP_STATUS_CATEGORY = {
+  'Need to Chase F Trial':'Trial Connection',
+  'Callback F Trial':'Trial Connection',
+  'Trial Done':'CX Feedback',
+  'Will Take Trial Again':'CX Feedback',
+  'Upcoming Feedback':'CX Feedback',
+  'Call Back F Feedback':'CX Feedback',
+  'Need to Chase F Feedback':'CX Feedback',
+  'Ongoing':'Signup Chasing',
+  'Will Sign Up':'Signup Chasing',
+  'He Will Sign Up Later':'Signup Chasing'
+};
+function followCategoryFor(b){return FOLLOWUP_STATUS_CATEGORY[b.status]||''}
+function isActiveFollowup(b){return !!followCategoryFor(b)&&!['Sale','Not Interested'].includes(b.status)}
+function setFollowFilter(k,btn){
+  activeFollowFilter=k;
+  document.querySelectorAll('#followQuickFilters button').forEach(x=>x.classList.toggle('active',x===btn));
+  renderFollowups();
+}
+function followDateMatches(b,k){
+  const today=dateKey(new Date()), d=b.follow_up_date||'';
+  const now=new Date();now.setHours(0,0,0,0);
+  const tomorrow=new Date(now);tomorrow.setDate(tomorrow.getDate()+1);
+  const end=new Date(now);end.setDate(end.getDate()+7);
+  if(k==='all')return true;
+  if(k==='unset')return !d;
+  if(!d)return false;
+  if(k==='today')return d===today;
+  if(k==='tomorrow')return d===dateKey(tomorrow);
+  if(k==='overdue')return d<today;
+  if(k==='week')return d>=today&&d<dateKey(end);
+  return false;
+}
+function followCompletedToday(){
+  const today=dateKey(new Date());
+  return followHistory.filter(h=>String(h.attempted_at||'').slice(0,10)===today);
+}
+async function loadFollowupHistory(){
+  const {data,error}=await sb.from('booking_followup_history')
+    .select('id,booking_id,agent_id,created_by,attempted_at,category,status_at_attempt,outcome,notes,next_follow_up_date,next_follow_up_time')
+    .order('attempted_at',{ascending:false}).limit(3000);
+  if(error){
+    followHistory=[];
+    showToast('Follow-up history table is not ready. Run the supplied Supabase SQL setup first.','error');
+    console.error('Follow-up history:',error.message);
+    return;
+  }
+  followHistory=data||[];
+}
+function renderFollowups(){
+  if(!$('followupRows')||!profile)return;
+  const q=($('followSearch')?.value||'').trim().toLowerCase();
+  const category=$('followCategory')?.value||'';
+  const agent=$('followAgent')?.value||'';
+  const isAdmin=profile.role==='admin';
+  const active=bookings.filter(b=>isActiveFollowup(b));
+  const completed=followCompletedToday();
+  const today=dateKey(new Date());
+  const overdue=active.filter(b=>b.follow_up_date&&b.follow_up_date<today);
+  const unset=active.filter(b=>!b.follow_up_date);
+  $('fuPendingCount').textContent=active.length;
+  $('fuOverdueCount').textContent=overdue.length;
+  $('fuUnsetCount').textContent=unset.length;
+  $('fuCompletedCount').textContent=completed.length;
+  const completedIds=new Set(completed.map(h=>String(h.booking_id)));
+  const sourceRows=activeFollowFilter==='completed'
+    ? bookings.filter(b=>completedIds.has(String(b.id)))
+    : active;
+  let rows=sourceRows.filter(b=>{
+    const hay=[b.customer_name,b.phone,b.profiles?.full_name,b.status,b.notes,followCategoryFor(b)].join(' ').toLowerCase();
+    if(!hay.includes(q)|| (category&&followCategoryFor(b)!==category) || (agent&&b.agent_id!==agent))return false;
+    if(activeFollowFilter==='completed')return true;
+    return followDateMatches(b,activeFollowFilter);
+  });
+  $('followupRows').innerHTML=rows.map(b=>`<tr>
+    <td><b>${esc(b.customer_name||'')}</b></td><td>${esc(b.phone||'')}</td><td>${esc(b.profiles?.full_name||'')}</td>
+    <td>${esc(followCategoryFor(b))}</td><td>${esc(b.status||'')}</td>
+    <td class="followup-cell">${renderFollowUp(b)}</td><td class="notes-cell">${b.notes?esc(b.notes):'<span class="notes-empty">No notes added</span>'}</td>
+    <td><button class="small" onclick="openFollowupModal('${String(b.id).replace(/'/g,'')}')">Update Follow-up</button></td></tr>`
+  ).join('')||`<tr><td colspan="8" class="muted">No CX found for this filter.</td></tr>`;
+  $('followAgentWrap')?.classList.toggle('hidden',!isAdmin);
+  if($('followAgent'))$('followAgent').innerHTML='<option value="">All agents</option>'+agents.map(a=>`<option value="${esc(a.id)}">${esc(a.full_name)}</option>`).join('');
+  if($('followAgentRows')){
+    $('followAgentRows').innerHTML=isAdmin?agents.map(a=>{
+      const own=active.filter(b=>b.agent_id===a.id);
+      const done=completed.filter(h=>h.agent_id===a.id).length;
+      return `<tr><td>${esc(a.full_name)}</td><td>${own.length}</td><td>${own.filter(b=>b.follow_up_date&&b.follow_up_date<today).length}</td><td>${done}</td></tr>`;
+    }).join(''):'<tr><td colspan="4" class="muted">Admin view only.</td></tr>';
+  }
+}
+async function openFollowupModal(id){
+  const b=bookings.find(x=>String(x.id)===String(id));if(!b)return;
+  $('followBookingId').value=b.id;
+  $('followModalCustomer').textContent=`${b.customer_name||''} · ${b.phone||''} · ${b.profiles?.full_name||''}`;
+  $('followNewStatus').innerHTML=statusOptionsHtml(b.status);
+  $('followNotes').value='';$('nextFollowDate').value=b.follow_up_date||'';$('nextFollowTime').value=String(b.follow_up_time||'').slice(0,5);
+  $('followHistoryList').textContent='Loading history...';
+  $('followupModal').classList.remove('hidden');
+  const {data,error}=await sb.from('booking_followup_history').select('*').eq('booking_id',b.id).order('attempted_at',{ascending:false}).limit(30);
+  if(error){$('followHistoryList').textContent='History unavailable. Please check the Supabase SQL setup.';return}
+  $('followHistoryList').innerHTML=(data||[]).map(h=>`<div class="follow-history-item"><b>${esc(h.outcome||'Attempt')}</b> · ${esc(h.category||'')}<br><span class="muted">${h.attempted_at?new Date(h.attempted_at).toLocaleString():''} · ${esc(h.created_by===currentUser.id?'You':(agents.find(a=>a.id===h.created_by)?.full_name||'Team member'))}</span><br>${esc(h.notes||'No notes')}<br><span class="muted">Next: ${esc(h.next_follow_up_date||'Not set')} ${esc(h.next_follow_up_time||'')}</span></div>`).join('')||'No previous attempts recorded.';
+}
+function closeFollowupModal(){$('followupModal')?.classList.add('hidden')}
+async function saveFollowupAttempt(){
+  const id=$('followBookingId').value,b=bookings.find(x=>String(x.id)===String(id));if(!b)return;
+  const nextDate=$('nextFollowDate').value||null,nextTime=$('nextFollowTime').value||null;
+  const nextStatus=$('followNewStatus').value;
+  const entry={
+    booking_id:b.id,agent_id:b.agent_id,created_by:currentUser.id,
+    category:followCategoryFor(b)||'Trial Connection',status_at_attempt:b.status,
+    outcome:$('followOutcome').value,notes:$('followNotes').value.trim(),
+    next_follow_up_date:nextDate,next_follow_up_time:nextTime
+  };
+  const {error:historyError}=await sb.from('booking_followup_history').insert(entry);
+  if(historyError){showToast('Could not save follow-up history: '+historyError.message,'error');return}
+  const {error:updateError}=await sb.from('bookings').update({
+    status:nextStatus,follow_up_date:nextDate,follow_up_time:nextTime
+  }).eq('id',b.id);
+  if(updateError){showToast('History saved, but booking update failed: '+updateError.message,'error');await loadData();return}
+  closeFollowupModal();showToast('Follow-up saved and history recorded.');await loadData();
+}
+
 function renderBookings(){
  const q=($('search').value||'').toLowerCase().trim(),st=$('filterStatus').value;
  const rows=bookings.filter(b=>{const hay=[b.customer_name,b.phone,b.profiles?.full_name,b.region,b.device,b.status,b.notes,b.email,b.follow_up_date,b.follow_up_time].join(' ').toLowerCase();return (!st||b.status===st)&&hay.includes(q)&&matchesQuickDate(b)});
@@ -604,7 +774,7 @@ async function updateStatus(id,status){
   } else {if(status==='Trial Done')notifyAction('trialCompleted');else showToast('Booking status updated successfully.');await loadData();}
 }
 async function deleteBooking(id){if(!confirm('Delete this booking?'))return;let {error}=await sb.from('bookings').delete().eq('id',id);if(error)showToast('Could not delete booking: '+error.message,'error');else {showToast('Booking deleted successfully.');await loadData()}}
-function tab(id,btn){['bookings','calendar','agents','new','trialDone'].forEach(x=>$(x).classList.toggle('hidden',x!==id));const active=$(id);if(active){active.classList.remove('section-enter');void active.offsetWidth;active.classList.add('section-enter')}document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='trialDone')renderTrialDone()}
+function tab(id,btn){['bookings','calendar','agents','new','trialDone','followups'].forEach(x=>$(x).classList.toggle('hidden',x!==id));const active=$(id);if(active){active.classList.remove('section-enter');void active.offsetWidth;active.classList.add('section-enter')}document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='trialDone')renderTrialDone();if(id==='followups')renderFollowups()}
 function renderCalendar(){
   let m=$('monthPick').value;if(!m)return;
   let [y,mo]=m.split('-').map(Number),days=new Date(y,mo,0).getDate(),start=new Date(y,mo-1,1).getDay(),filter=$('calendarFilter').value;
